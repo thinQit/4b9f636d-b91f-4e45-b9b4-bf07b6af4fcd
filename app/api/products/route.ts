@@ -1,92 +1,89 @@
 import { NextResponse } from "next/server";
-import { products } from "@/lib/products";
+import { db } from "@/lib/db";
 import { productsQuerySchema } from "@/lib/validators";
+import { Prisma } from "@prisma/client";
 
-export async function GET(request: Request) {
+export async function GET(req: Request) {
   try {
-    const { searchParams } = new URL(request.url);
-    const rawQuery = {
-      category: searchParams.get("category") ?? undefined,
-      sort: searchParams.get("sort") ?? undefined,
-      q: searchParams.get("q") ?? undefined,
-      minPrice: searchParams.get("minPrice") ?? undefined,
-      maxPrice: searchParams.get("maxPrice") ?? undefined,
-    };
-
-    const parsed = productsQuerySchema.safeParse(rawQuery);
+    const { searchParams } = new URL(req.url);
+    const raw = Object.fromEntries(searchParams.entries());
+    const parsed = productsQuerySchema.safeParse(raw);
 
     if (!parsed.success) {
       return NextResponse.json(
-        {
-          success: false,
-          error: "Invalid query parameters",
-          details: parsed.error.flatten(),
-        },
+        { error: "Invalid query params", details: parsed.error.flatten() },
         { status: 400 }
       );
     }
 
-    const { category, sort, q, minPrice, maxPrice } = parsed.data;
-    let filtered = [...products];
+    const { category, minPrice, maxPrice, rating, inStock, search, sort, limit, page } = parsed.data;
 
-    if (category) {
-      filtered = filtered.filter((product) => product.category === category);
-    }
+    const where: Prisma.ProductWhereInput = {
+      ...(category ? { category } : {}),
+      ...(typeof inStock === "boolean" ? { inStock } : {}),
+      ...(typeof rating === "number" ? { rating: { gte: rating } } : {}),
+      ...(typeof minPrice === "number" || typeof maxPrice === "number"
+        ? {
+            price: {
+              ...(typeof minPrice === "number" ? { gte: minPrice } : {}),
+              ...(typeof maxPrice === "number" ? { lte: maxPrice } : {}),
+            },
+          }
+        : {}),
+      ...(search
+        ? {
+            OR: [
+              { name: { contains: search, mode: "insensitive" } },
+              { slug: { contains: search, mode: "insensitive" } },
+              { category: { contains: search, mode: "insensitive" } },
+            ],
+          }
+        : {}),
+    };
 
-    if (q) {
-      filtered = filtered.filter((product) => {
-        const haystack = `${product.name} ${product.description} ${product.highlights.join(" ")}`.toLowerCase();
-        return haystack.includes(q);
-      });
-    }
+    const orderByMap = {
+      best: [{ reviewCount: "desc" as const }, { rating: "desc" as const }],
+      new: [{ createdAt: "desc" as const }],
+      "price-asc": [{ price: "asc" as const }],
+      "price-desc": [{ price: "desc" as const }],
+      rating: [{ rating: "desc" as const }, { reviewCount: "desc" as const }],
+    };
 
-    if (typeof minPrice === "number") {
-      filtered = filtered.filter((product) => product.price >= minPrice);
-    }
+    const orderBy = orderByMap[sort ?? "best"];
+    const skip = (page - 1) * limit;
 
-    if (typeof maxPrice === "number") {
-      filtered = filtered.filter((product) => product.price <= maxPrice);
-    }
+    const [items, total] = await Promise.all([
+      db.product.findMany({
+        where,
+        orderBy,
+        skip,
+        take: limit,
+        select: {
+          slug: true,
+          name: true,
+          price: true,
+          compareAtPrice: true,
+          rating: true,
+          reviewCount: true,
+          category: true,
+          inStock: true,
+          badge: true,
+          image: true,
+        },
+      }),
+      db.product.count({ where }),
+    ]);
 
-    if (sort === "best-sellers") {
-      filtered.sort((a, b) => Number(Boolean(b.isBestSeller)) - Number(Boolean(a.isBestSeller)));
-    } else if (sort === "top-rated") {
-      filtered.sort((a, b) => b.rating - a.rating);
-    } else if (sort === "price-low") {
-      filtered.sort((a, b) => a.price - b.price);
-    } else if (sort === "price-high") {
-      filtered.sort((a, b) => b.price - a.price);
-    } else if (sort === "new") {
-      filtered.sort((a, b) => Number(Boolean(b.isNewArrival)) - Number(Boolean(a.isNewArrival)));
-    }
-
-    return NextResponse.json(
-      {
-        success: true,
-        data: filtered.map((product) => ({
-          sku: product.sku,
-          slug: product.slug,
-          name: product.name,
-          category: product.category,
-          price: product.price,
-          compareAtPrice: product.compareAtPrice ?? null,
-          rating: product.rating,
-          reviewCount: product.reviewCount,
-          badge: product.badge ?? null,
-          image: product.image,
-        })),
-        total: filtered.length,
+    return NextResponse.json({
+      items,
+      pagination: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
       },
-      { status: 200 }
-    );
-  } catch (error) {
-    console.error("GET /api/products error:", error);
-    return NextResponse.json(
-      {
-        success: false,
-        error: "Internal server error",
-      },
-      { status: 500 }
-    );
+    });
+  } catch {
+    return NextResponse.json({ error: "Failed to fetch products." }, { status: 500 });
   }
 }

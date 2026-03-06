@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import Link from 'next/link'
 import { Menu, Search, ShoppingCart, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -20,88 +20,106 @@ interface NavbarProps {
 }
 
 export default function Navbar({
-  logoText = 'Northlane Shop',
+  logoText = 'NovaMart',
   links = [
-    { label: 'New Arrivals', href: '/collections/new' },
-    { label: 'Men', href: '/collections/men' },
-    { label: 'Women', href: '/collections/women' },
-    { label: 'Accessories', href: '/collections/accessories' },
-    { label: 'Sale', href: '/collections/sale' },
+    { label: 'New Arrivals', href: '/new-arrivals' },
+    { label: 'Best Sellers', href: '/best-sellers' },
+    { label: 'Electronics', href: '/category/electronics' },
+    { label: 'Home', href: '/category/home' },
+    { label: 'Deals', href: '/deals' },
   ],
-  cartCount = 2,
+  cartCount = 0,
   className = '',
 }: Partial<NavbarProps>) {
-  const [open, setOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
+  const [query, setQuery] = useState('')
+
+  const cartLabel = useMemo(() => {
+    return cartCount > 99 ? '99+' : String(cartCount)
+  }, [cartCount])
 
   return (
-    <header className={cn('sticky top-0 z-50 border-b bg-white/95 backdrop-blur', className)}>
-      <div className="mx-auto flex max-w-7xl items-center gap-3 px-4 py-3 md:gap-6">
-        <Link href="/" className="shrink-0 text-lg font-bold tracking-tight text-[#1A1A2E]">
-          {logoText}
-        </Link>
-
-        <nav className="hidden items-center gap-5 md:flex">
-          {links.map((link) => (
-            <Link key={link.href} href={link.href} className="text-sm font-medium text-[#1A1A2E] hover:text-[#E63946]">
-              {link.label}
+    <header className={cn('sticky top-0 z-50 bg-[#F8F9FA]/95 backdrop-blur border-b', className)}>
+      <div className="mx-auto max-w-7xl px-4 md:px-6">
+        <div className="flex h-16 items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="md:hidden"
+              onClick={() => setIsOpen(true)}
+              aria-label="Open navigation menu"
+            >
+              <Menu className="h-5 w-5" />
+            </Button>
+            <Link href="/" className="text-xl font-bold tracking-tight text-[#1A1A2E]">
+              {logoText}
             </Link>
-          ))}
-        </nav>
-
-        <div className="ml-auto hidden w-full max-w-sm md:block">
-          <div className="relative">
-            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <Input placeholder="Search products..." className="pl-9" />
           </div>
+
+          <nav className="hidden items-center gap-5 md:flex">
+            {links.map((link, idx) => (
+              <Link
+                key={link.href + idx}
+                href={link.href}
+                className="text-sm font-medium text-[#1A1A2E] transition-colors hover:text-[#E63946]"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+
+          <div className="hidden w-full max-w-sm items-center gap-2 md:flex">
+            <div className="relative w-full">
+              <Search className="pointer-events-none absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search products..."
+                className="pl-9 rounded-xl"
+              />
+            </div>
+          </div>
+
+          <Button variant="outline" className="rounded-xl border-[#1A1A2E]/20">
+            <ShoppingCart className="mr-2 h-4 w-4" />
+            Cart
+            <span className="ml-2 inline-flex min-w-5 items-center justify-center rounded-full bg-[#E63946] px-1.5 py-0.5 text-[10px] font-semibold text-white">
+              {cartLabel}
+            </span>
+          </Button>
         </div>
-
-        <Button variant="outline" className="relative hidden md:inline-flex">
-          <ShoppingCart className="mr-2 h-4 w-4" />
-          Cart
-          <span className="ml-2 rounded-full bg-[#E63946] px-2 py-0.5 text-xs text-white">{cartCount}</span>
-        </Button>
-
-        <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setOpen(true)}>
-          <Menu className="h-5 w-5" />
-        </Button>
       </div>
 
-      {open && (
+      {isOpen && (
         <div className="fixed inset-0 z-[60] md:hidden">
-          <button className="absolute inset-0 bg-black/40" onClick={() => setOpen(false)} aria-label="Close menu" />
-          <aside className="absolute right-0 top-0 h-full w-[85%] max-w-sm bg-white p-5 shadow-xl">
-            <div className="mb-6 flex items-center justify-between">
-              <span className="font-semibold text-[#1A1A2E]">Menu</span>
-              <Button variant="ghost" size="icon" onClick={() => setOpen(false)}>
+          <div className="absolute inset-0 bg-black/40" onClick={() => setIsOpen(false)} />
+          <div className="absolute left-0 top-0 h-full w-[85%] max-w-sm bg-white shadow-xl">
+            <div className="flex h-14 items-center justify-between border-b px-4">
+              <span className="font-semibold">{logoText}</span>
+              <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)}>
                 <X className="h-5 w-5" />
               </Button>
             </div>
-
-            <div className="mb-5">
-              <div className="relative">
-                <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                <Input placeholder="Search products..." className="pl-9" />
+            <div className="p-4">
+              <div className="relative mb-4">
+                <Search className="pointer-events-none absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                <Input placeholder="Search products..." className="pl-9 rounded-xl" />
               </div>
+              <nav className="flex flex-col gap-1">
+                {links.map((link, idx) => (
+                  <Link
+                    key={link.href + '-mobile-' + idx}
+                    href={link.href}
+                    onClick={() => setIsOpen(false)}
+                    className="rounded-lg px-3 py-2 text-sm font-medium text-[#1A1A2E] hover:bg-muted"
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </nav>
             </div>
-
-            <nav className="flex flex-col gap-1">
-              {links.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setOpen(false)}
-                  className="rounded-md px-3 py-2 text-sm font-medium text-[#1A1A2E] hover:bg-muted"
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </nav>
-
-            <Button className="mt-6 w-full bg-[#E63946] hover:bg-[#d83240]">
-              <ShoppingCart className="mr-2 h-4 w-4" />
-              View Cart ({cartCount})
-            </Button>
-          </aside>
+          </div>
         </div>
       )}
     </header>

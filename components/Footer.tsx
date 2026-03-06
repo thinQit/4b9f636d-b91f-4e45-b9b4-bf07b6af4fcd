@@ -1,92 +1,63 @@
 "use client";
 
+import React from 'react'
 import Link from 'next/link'
+import { Facebook, Instagram, Mail, MapPin, Phone, Twitter } from 'lucide-react'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
-import { cn } from '@/lib/utils'
-
-interface FooterLink {
-  label: string
-  href: string
-}
 
 interface FooterProps {
-  shopLinks?: FooterLink[]
-  companyLinks?: FooterLink[]
-  helpLinks?: FooterLink[]
-  address?: string
-  hours?: string
-  legalText?: string
-  className?: string
+  brandName?: string
+  year?: number
 }
 
 export default function Footer({
-  shopLinks = [
-    { label: 'New Arrivals', href: '/collections/new' },
-    { label: 'Best Sellers', href: '/collections/best-sellers' },
-    { label: 'Sale', href: '/collections/sale' },
-  ],
-  companyLinks = [
-    { label: 'About Us', href: '/about' },
-    { label: 'Careers', href: '/careers' },
-    { label: 'Press', href: '/press' },
-  ],
-  helpLinks = [
-    { label: 'Shipping', href: '/shipping' },
-    { label: 'Returns', href: '/returns' },
-    { label: 'Contact', href: '/contact' },
-  ],
-  address = '128 Market Street, San Francisco, CA 94103',
-  hours = 'Mon–Sat 10:00 AM – 7:00 PM',
-  legalText = '© 2026 Northlane Shop. All rights reserved.',
-  className = '',
+  brandName = 'NovaMart',
+  year = new Date().getFullYear(),
 }: Partial<FooterProps>) {
   return (
-    <footer className={cn('bg-[#1A1A2E] text-white', className)}>
-      <div className="mx-auto grid max-w-7xl gap-8 px-4 py-14 md:grid-cols-4">
-        <div>
-          <h4 className="text-lg font-bold">Northlane Shop</h4>
-          <p className="mt-3 text-sm text-white/80">{address}</p>
-          <p className="mt-1 text-sm text-white/80">{hours}</p>
+    <footer className="bg-[#1A1A2E] text-white">
+      <div className="mx-auto max-w-7xl px-4 py-14 md:px-6">
+        <div className="grid gap-10 md:grid-cols-4">
+          <div className="space-y-3 md:col-span-2">
+            <h3 className="text-2xl font-bold">{brandName}</h3>
+            <p className="max-w-md text-sm text-white/75">
+              Curated quality products, fast delivery, and trusted support for every order.
+            </p>
+            <div className="flex max-w-md items-center gap-2">
+              <Input placeholder="Enter your email" className="bg-white text-[#1A1A2E]" />
+              <Button className="bg-[#E63946] text-white hover:bg-[#d5303d]">Subscribe</Button>
+            </div>
+          </div>
+
+          <div>
+            <h4 className="mb-3 font-semibold">Policies</h4>
+            <ul className="space-y-2 text-sm text-white/75">
+              <li><Link href="/shipping">Shipping Policy</Link></li>
+              <li><Link href="/returns">Returns & Refunds</Link></li>
+              <li><Link href="/privacy">Privacy Policy</Link></li>
+              <li><Link href="/terms">Terms of Service</Link></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="mb-3 font-semibold">Contact</h4>
+            <ul className="space-y-3 text-sm text-white/75">
+              <li className="flex items-start gap-2"><MapPin className="h-4 w-4 mt-0.5" /> 210 Market Street, Austin, TX</li>
+              <li className="flex items-center gap-2"><Phone className="h-4 w-4" /> +1 (512) 555-0198</li>
+              <li className="flex items-center gap-2"><Mail className="h-4 w-4" /> support@novamart.com</li>
+            </ul>
+            <div className="mt-4 flex gap-3">
+              <Link href="#" className="text-white/80 hover:text-white"><Facebook className="h-4 w-4" /></Link>
+              <Link href="#" className="text-white/80 hover:text-white"><Instagram className="h-4 w-4" /></Link>
+              <Link href="#" className="text-white/80 hover:text-white"><Twitter className="h-4 w-4" /></Link>
+            </div>
+          </div>
         </div>
-        <div>
-          <h5 className="font-semibold">Shop</h5>
-          <ul className="mt-3 space-y-2 text-sm text-white/80">
-            {shopLinks.map((l) => (
-              <li key={l.href}>
-                <Link href={l.href} className="hover:text-white">
-                  {l.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <h5 className="font-semibold">Company</h5>
-          <ul className="mt-3 space-y-2 text-sm text-white/80">
-            {companyLinks.map((l) => (
-              <li key={l.href}>
-                <Link href={l.href} className="hover:text-white">
-                  {l.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <h5 className="font-semibold">Help</h5>
-          <ul className="mt-3 space-y-2 text-sm text-white/80">
-            {helpLinks.map((l) => (
-              <li key={l.href}>
-                <Link href={l.href} className="hover:text-white">
-                  {l.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
+        <Separator className="my-8 bg-white/15" />
+        <p className="text-center text-xs text-white/60">© {year} {brandName}. All rights reserved.</p>
       </div>
-      <Separator className="bg-white/20" />
-      <div className="mx-auto max-w-7xl px-4 py-4 text-xs text-white/70">{legalText}</div>
     </footer>
   )
 }

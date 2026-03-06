@@ -1,48 +1,67 @@
-"use client";
+'use client'
 
+import React, { useState } from 'react'
 import Image from 'next/image'
-import Link from 'next/link'
 import { Card } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
 
-interface Category {
-  id: string
+interface CategoryItem {
   name: string
-  description: string
-  href: string
   imageSrc: string
+  count: string
 }
 
 interface CategoryCardsProps {
-  title?: string
-  categories?: Category[]
-  className?: string
+  tabs?: string[]
+  categories?: CategoryItem[]
 }
 
 export default function CategoryCards({
-  title = 'Shop by Category',
+  tabs = ['Trending', 'Home', 'Tech', 'Lifestyle'],
   categories = [
-    { id: '1', name: 'Men', description: 'Tailored basics & street essentials', href: '/collections/men', imageSrc: 'https://res.cloudinary.com/dwc294mzm/image/upload/c_fill,w_1000,h_750,g_auto/v1/site-images/corporate/default.jpg' },
-    { id: '2', name: 'Women', description: 'Modern fits for everyday wear', href: '/collections/women', imageSrc: 'https://res.cloudinary.com/dwc294mzm/image/upload/c_fill,w_1000,h_750,g_auto/v1/site-images/corporate/default.jpg' },
-    { id: '3', name: 'Accessories', description: 'Bags, caps, belts & more', href: '/collections/accessories', imageSrc: 'https://res.cloudinary.com/dwc294mzm/image/upload/c_fill,w_800,h_800,g_auto/v1/site-images/corporate/default.jpg' },
+    { name: 'Audio', imageSrc: 'https://res.cloudinary.com/dwc294mzm/image/upload/c_fill,w_800,h_800,g_auto/v1/site-images/corporate/default.jpg', count: '42 products' },
+    { name: 'Office', imageSrc: 'https://res.cloudinary.com/dwc294mzm/image/upload/c_fill,w_1000,h_750,g_auto/v1/site-images/corporate/default.jpg', count: '31 products' },
+    { name: 'Kitchen', imageSrc: 'https://res.cloudinary.com/dwc294mzm/image/upload/c_fill,w_1000,h_750,g_auto/v1/site-images/corporate/default.jpg', count: '28 products' },
+    { name: 'Travel', imageSrc: 'https://res.cloudinary.com/dwc294mzm/image/upload/c_fill,w_800,h_800,g_auto/v1/site-images/corporate/default.jpg', count: '19 products' },
   ],
-  className = '',
 }: Partial<CategoryCardsProps>) {
+  const [activeTab, setActiveTab] = useState(tabs[0] || 'Trending')
+
   return (
-    <section className={cn('py-20 md:py-28', className)}>
-      <div className="mx-auto max-w-7xl px-4">
-        <h2 className="text-2xl font-bold tracking-tight text-[#1A1A2E] md:text-3xl">{title}</h2>
-        <div className="mt-8 grid gap-4 md:grid-cols-3 md:gap-6">
-          {categories.map((category) => (
-            <Link key={category.id} href={category.href}>
-              <Card className="overflow-hidden rounded-xl border bg-card shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
-                <Image src={category.imageSrc} alt={category.name} width={800} height={600} className="h-44 w-full object-cover" />
-                <div className="p-4">
-                  <h3 className="text-lg font-semibold text-[#1A1A2E]">{category.name}</h3>
-                  <p className="mt-1 text-sm text-muted-foreground">{category.description}</p>
-                </div>
-              </Card>
-            </Link>
+    <section className="py-20 md:py-28 bg-muted/30">
+      <div className="mx-auto max-w-7xl px-4 md:px-6">
+        <h2 className="mb-6 text-2xl font-bold text-[#1A1A2E] md:text-3xl">Shop by Category</h2>
+
+        <div className="mb-6 flex flex-wrap gap-2">
+          {tabs.map((tab, idx) => (
+            <button
+              key={tab + idx}
+              onClick={() => setActiveTab(tab)}
+              className={cn(
+                'rounded-full px-4 py-2 text-sm font-medium transition',
+                activeTab === tab ? 'bg-[#1A1A2E] text-white' : 'bg-white text-[#1A1A2E] border'
+              )}
+            >
+              {tab}
+            </button>
+          ))}
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {categories.map((cat, idx) => (
+            <Card key={cat.name + idx} className="overflow-hidden rounded-2xl border bg-card p-0">
+              <Image
+                src={cat.imageSrc}
+                alt={cat.name}
+                width={800}
+                height={600}
+                className="h-40 w-full object-cover"
+              />
+              <div className="p-4">
+                <h3 className="font-semibold text-[#1A1A2E]">{cat.name}</h3>
+                <p className="text-sm text-muted-foreground">{cat.count}</p>
+              </div>
+            </Card>
           ))}
         </div>
       </div>

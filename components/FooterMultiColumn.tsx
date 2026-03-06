@@ -17,33 +17,8 @@ interface FooterMultiColumnProps {
 
 export default function FooterMultiColumn({
   brand = 'ShopNova',
-  description = 'Your trusted online destination for quality products, fair prices, and dependable delivery.',
-  columns = [
-    {
-      title: 'Shop',
-      links: [
-        { label: 'New Arrivals', href: '#featured-products' },
-        { label: 'Best Sellers', href: '#featured-products' },
-        { label: 'Categories', href: '#categories' },
-      ],
-    },
-    {
-      title: 'Support',
-      links: [
-        { label: 'FAQs', href: '#faq' },
-        { label: 'Shipping & Returns', href: '#footer' },
-        { label: 'Contact Us', href: '#contact' },
-      ],
-    },
-    {
-      title: 'Company',
-      links: [
-        { label: 'About', href: '#about' },
-        { label: 'Privacy Policy', href: '#footer' },
-        { label: 'Terms of Service', href: '#footer' },
-      ],
-    },
-  ],
+  description = 'Premium everyday essentials with fast delivery, secure checkout, and support you can trust.',
+  columns = [],
   copyright,
 }: Partial<FooterMultiColumnProps>) {
   return (
@@ -51,18 +26,18 @@ export default function FooterMultiColumn({
       <div className="container mx-auto max-w-7xl px-4 py-12 md:py-16">
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           <div className="lg:col-span-1">
-            <h3 className="text-lg font-bold">{brand}</h3>
+            <h3 className="text-lg font-bold text-amber-300">{brand}</h3>
             <p className="mt-3 text-sm text-background/70">{description}</p>
           </div>
           {columns.map(function (col) {
             return (
               <div key={col.title}>
-                <h4 className="text-sm font-semibold uppercase tracking-wider">{col.title}</h4>
+                <h4 className="text-sm font-semibold uppercase tracking-wider text-amber-200">{col.title}</h4>
                 <ul className="mt-4 space-y-3">
                   {col.links.map(function (link) {
                     return (
                       <li key={link.href}>
-                        <Link href={link.href} className="text-sm text-background/70 transition-colors hover:text-background">
+                        <Link href={link.href} className="text-sm text-background/70 transition-colors hover:text-amber-200">
                           {link.label}
                         </Link>
                       </li>

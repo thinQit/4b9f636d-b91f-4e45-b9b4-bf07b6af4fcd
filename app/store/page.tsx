@@ -1,28 +1,27 @@
 export const dynamic = 'force-dynamic';
 
-import HeroGradient from "@/components/HeroGradient"
-import ProductGrid from "@/components/ProductGrid"
-import CTABanner from "@/components/CTABanner"
+import Hero from "@/components/Hero";
+import SearchBar from "@/components/SearchBar";
+import FilterSidebar from "@/components/FilterSidebar";
+import ProductGrid from "@/components/ProductGrid";
+import CTASection from "@/components/CTASection";
+import SEOHead from "@/components/SEOHead";
 
 export default function StorePage() {
   return (
-    <div>
-      <HeroGradient
-        badge="Free shipping over $60 • Dispatch in 1–2 business days • 30-day returns"
-        headline="Shop all products"
-        subheadline="Browse by category, filter by price, and find your next daily essential."
-        primaryCta={{ label: "View best sellers", href: "/store?sort=best-sellers" }}
-        secondaryCta={{ label: "Shipping & returns", href: "/store-details#shipping" }}
-      />
-      <ProductGrid />
-      <CTABanner
-        headline="Questions about compatibility or materials?"
-        description="Tell us what device or use-case you have—we’ll recommend the right pick."
-        ctaLabel="Contact support"
-        ctaHref="/contact?topic=product-question"
-        secondaryCtaLabel="Read FAQ"
-        secondaryCtaHref="/store-details#faq"
-      />
-    </div>
-  )
+    <main>
+      <SEOHead />
+      <Hero />
+      <section className="py-20 md:py-28 bg-muted/40">
+        <div className="mx-auto max-w-7xl px-4 md:px-6 grid gap-6 md:gap-8 lg:grid-cols-[280px_1fr]">
+          <FilterSidebar />
+          <div className="space-y-6">
+            <SearchBar />
+            <ProductGrid />
+          </div>
+        </div>
+      </section>
+      <CTASection />
+    </main>
+  );
 }

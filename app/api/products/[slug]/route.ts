@@ -1,68 +1,51 @@
 import { NextResponse } from "next/server";
-import { products } from "@/lib/products";
-import { productSlugParamsSchema } from "@/lib/validators";
+import { db } from "@/lib/db";
+import { productSlugSchema } from "@/lib/validators";
 
-type RouteContext = {
-  params: Promise<{ slug: string }>;
-};
-
-export async function GET(_request: Request, context: RouteContext) {
+export async function GET(_: Request, context: { params: { slug: string } }) {
   try {
-    const params = await context.params;
-    const parsed = productSlugParamsSchema.safeParse(params);
+    const parsed = productSlugSchema.safeParse(context.params);
 
     if (!parsed.success) {
       return NextResponse.json(
-        {
-          success: false,
-          error: "Invalid product slug",
-          details: parsed.error.flatten(),
-        },
+        { error: "Invalid slug", details: parsed.error.flatten() },
         { status: 400 }
       );
     }
 
     const { slug } = parsed.data;
-    const product = products.find((item) => item.slug === slug);
+
+    const product = await db.product.findUnique({
+      where: { slug },
+      include: {
+        images: {
+          orderBy: { position: "asc" as const },
+          select: { src: true, alt: true, position: true },
+        },
+        specs: {
+          orderBy: { position: "asc" as const },
+          select: { label: true, value: true, position: true },
+        },
+        testimonials: {
+          orderBy: { createdAt: "desc" as const },
+          take: 10,
+          select: {
+            name: true,
+            location: true,
+            rating: true,
+            quote: true,
+            createdAt: true,
+          },
+        },
+      },
+    });
 
     if (!product) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "Product not found",
-        },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Product not found." }, { status: 404 });
     }
 
-    const relatedProducts = products
-      .filter((item) => product.relatedSlugs.includes(item.slug))
-      .map((item) => ({
-        sku: item.sku,
-        slug: item.slug,
-        name: item.name,
-        price: item.price,
-        image: item.image,
-      }));
-
-    return NextResponse.json(
-      {
-        success: true,
-        data: {
-          ...product,
-          relatedProducts,
-        },
-      },
-      { status: 200 }
-    );
-  } catch (error) {
-    console.error("GET /api/products/[slug] error:", error);
-    return NextResponse.json(
-      {
-        success: false,
-        error: "Internal server error",
-      },
-      { status: 500 }
-    );
+    return NextResponse.json({ item: product });
+  } catch {
+    return NextResponse.json({ error: "Failed to fetch product." }, { status: 500 });
   }
 }

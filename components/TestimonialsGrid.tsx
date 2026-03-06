@@ -1,95 +1,65 @@
 "use client";
 
-import { Card, CardContent } from '@/components/ui/card';
-import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import React from 'react'
+import { Card } from '@/components/ui/card'
+import { Star } from 'lucide-react'
 
 interface Testimonial {
-  quote: string;
-  name: string;
-  title: string;
-  avatarUrl?: string;
-  rating?: number;
+  name: string
+  title: string
+  review: string
+  rating: number
 }
 
 interface TestimonialsGridProps {
-  headline: string;
-  subheadline?: string;
-  testimonials: Testimonial[];
+  testimonials?: Testimonial[]
 }
 
 export default function TestimonialsGrid({
-  headline = 'Loved by Thousands of Happy Shoppers',
-  subheadline = 'Real feedback from customers who trust us for quality and convenience.',
   testimonials = [
     {
-      quote: 'Fast shipping, amazing quality, and super easy checkout. This is now my go-to store.',
-      name: 'Ava Thompson',
+      name: 'Mia Johnson',
       title: 'Verified Buyer',
-      avatarUrl: 'https://res.cloudinary.com/dwc294mzm/image/upload/c_fill,w_1000,h_750,g_auto/v1/site-images/corporate/default.jpg',
+      review: 'Great quality and fast dispatch. Packaging was premium and secure.',
       rating: 5,
     },
     {
-      quote: 'The product looked exactly like the photos. Great value and excellent customer support.',
-      name: 'Noah Martinez',
-      title: 'Repeat Customer',
-      avatarUrl: 'https://res.cloudinary.com/dwc294mzm/image/upload/c_fill,w_1000,h_750,g_auto/v1/site-images/corporate/default.jpg',
-      rating: 5,
-    },
-    {
-      quote: 'I found everything I needed in one place. Smooth experience from browsing to delivery.',
-      name: 'Sophia Lee',
-      title: 'First-Time Shopper',
-      avatarUrl: 'https://res.cloudinary.com/dwc294mzm/image/upload/c_fill,w_1000,h_750,g_auto/v1/site-images/corporate/default.jpg',
+      name: 'Leo Carter',
+      title: 'First-time Customer',
+      review: 'Easy browsing experience and the filters helped me find exactly what I needed.',
       rating: 4,
+    },
+    {
+      name: 'Sofia Lee',
+      title: 'Loyal Customer',
+      review: 'Love the seasonal deals and loyalty perks. Returns process is smooth too.',
+      rating: 5,
     },
   ],
 }: Partial<TestimonialsGridProps>) {
   return (
-    <section className="py-20 md:py-28" id="testimonials">
-      <div className="container mx-auto max-w-7xl px-4">
-        <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl">{headline}</h2>
-          {subheadline && <p className="mt-4 text-lg text-muted-foreground">{subheadline}</p>}
-        </div>
-        <div className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {testimonials.map(function (t, i) {
-            var initials = t.name
-              .split(' ')
-              .map(function (n) {
-                return n[0];
-              })
-              .join('');
-            return (
-              <Card key={i} className="border bg-background">
-                <CardContent className="p-6">
-                  {t.rating && (
-                    <div className="mb-3 flex gap-1">
-                      {Array.from({ length: t.rating }).map(function (_, j) {
-                        return (
-                          <span key={j} className="text-yellow-500">
-                            &#9733;
-                          </span>
-                        );
-                      })}
-                    </div>
-                  )}
-                  <p className="italic text-muted-foreground">&ldquo;{t.quote}&rdquo;</p>
-                  <div className="mt-4 flex items-center gap-3">
-                    <Avatar>
-                      {t.avatarUrl ? <AvatarImage src={t.avatarUrl} alt={t.name} /> : null}
-                      <AvatarFallback>{initials}</AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <p className="text-sm font-semibold text-foreground">{t.name}</p>
-                      <p className="text-xs text-muted-foreground">{t.title}</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
+    <section className="py-20 md:py-28 bg-muted/30">
+      <div className="mx-auto max-w-7xl px-4 md:px-6">
+        <div className="grid gap-4 md:grid-cols-3">
+          {testimonials.map((item, idx) => (
+            <Card key={item.name + idx} className="rounded-2xl border bg-card p-5">
+              <div className="mb-3 flex">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Star
+                    key={item.name + '-star-' + i}
+                    className={i < item.rating ? 'h-4 w-4 fill-yellow-400 text-yellow-400' : 'h-4 w-4 text-muted'}
+                  />
+                ))}
+              </div>
+              <p className="text-sm text-muted-foreground">"{item.review}"</p>
+              <div className="mt-4">
+                <p className="font-semibold text-[#1A1A2E]">{item.name}</p>
+                <p className="text-xs text-muted-foreground">{item.title}</p>
+              </div>
+            </Card>
+          ))}
         </div>
       </div>
     </section>
-  );
+  )
 }

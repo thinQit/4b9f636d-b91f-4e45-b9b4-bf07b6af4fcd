@@ -1,51 +1,50 @@
 'use client'
 
-import Link from 'next/link'
-import { Sparkles, Truck, Gift } from 'lucide-react'
+import React from 'react'
+import { Truck, Sparkles, Tag } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
-interface AnnouncementItem {
-  id: string
-  text: string
-  href: string
-  icon: string
-}
-
 interface AnnouncementBarProps {
-  items?: AnnouncementItem[]
+  message?: string
+  shippingMessage?: string
+  saleCode?: string
   className?: string
 }
 
-const iconMap = {
-  Sparkles,
-  Truck,
-  Gift,
-}
-
-function getIcon(name: string) {
-  return iconMap[name as keyof typeof iconMap] || Sparkles
-}
-
 export default function AnnouncementBar({
-  items = [
-    { id: '1', text: 'Spring Drop Live — Up to 30% Off', href: '/collections/sale', icon: 'Sparkles' },
-    { id: '2', text: 'Free Shipping on Orders Over $75', href: '/shipping', icon: 'Truck' },
-    { id: '3', text: 'Bundle & Save on Best Sellers', href: '/collections/bundles', icon: 'Gift' },
-  ],
+  message = 'Spring Sale: Up to 30% off selected essentials.',
+  shippingMessage = 'Free shipping on orders over $75',
+  saleCode = 'SPRING30',
   className = '',
 }: Partial<AnnouncementBarProps>) {
   return (
-    <div className={cn('w-full bg-[#1A1A2E] text-white', className)}>
-      <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-4 px-4 py-2 text-sm md:gap-8">
-        {items.map((item) => {
-          const Icon = getIcon(item.icon)
-          return (
-            <Link key={item.id} href={item.href} className="inline-flex items-center gap-2 opacity-95 transition hover:opacity-100">
-              <Icon className="h-4 w-4 text-[#E63946]" />
-              <span>{item.text}</span>
-            </Link>
-          )
-        })}
+    <div
+      className={cn(
+        'w-full bg-[#1A1A2E] text-white border-b border-white/10',
+        className
+      )}
+    >
+      <div className="mx-auto max-w-7xl px-4 py-2.5 md:px-6">
+        <div className="flex flex-col items-center justify-between gap-2 text-xs sm:flex-row sm:text-sm">
+          <div className="flex items-center gap-2 font-medium">
+            <Sparkles className="h-4 w-4 text-[#E63946]" />
+            <span>{message}</span>
+          </div>
+          <div className="hidden h-4 w-px bg-white/20 sm:block" />
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-1.5">
+              <Truck className="h-4 w-4 text-[#E63946]" />
+              <span>{shippingMessage}</span>
+            </div>
+            <div className="hidden h-4 w-px bg-white/20 md:block" />
+            <div className="flex items-center gap-1.5">
+              <Tag className="h-4 w-4 text-[#E63946]" />
+              <span>
+                Use code: <strong>{saleCode}</strong>
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   )

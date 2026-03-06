@@ -1,5 +1,5 @@
-"use client";
-import { AnimatedTestimonials } from "@/components/ui/animated-testimonials";
+'use client';
+import { AnimatedTestimonials } from '@/components/ui/animated-testimonials';
 
 interface TestimonialItem {
   quote: string;
@@ -9,33 +9,26 @@ interface TestimonialItem {
 }
 
 interface TestimonialsAnimatedProps {
-  title?: string;
-  headline?: string;
-  subtitle?: string;
+  headline: string;
   subheadline?: string;
   testimonials: TestimonialItem[];
   autoplay?: boolean;
 }
 
 export default function TestimonialsAnimated({
-  title,
-  headline,
-  subtitle,
-  subheadline,
+  headline = 'Loved by Shoppers Everywhere',
+  subheadline = 'Real stories from customers who trust us for quality and service.',
   testimonials = [],
   autoplay = true,
 }: Partial<TestimonialsAnimatedProps>) {
-  // Prefer title, then headline for heading; subtitle, then subheadline for sub.
-  const resolvedTitle = title ?? headline ?? "Loved by Shoppers Nationwide";
-  const resolvedSub = subtitle ?? subheadline ?? "Real stories from customers who trust us for quality and convenience.";
   return (
     <section className="py-20 md:py-28">
       <div className="container mx-auto max-w-7xl px-4">
-        <div className="mb-8 mx-auto max-w-2xl text-center">
-          <h2 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl">{resolvedTitle}</h2>
-          {resolvedSub && <p className="mt-4 text-lg text-muted-foreground">{resolvedSub}</p>}
+        <div className="mx-auto mb-8 max-w-2xl text-center">
+          <h2 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl">{headline}</h2>
+          {subheadline && <p className="mt-4 text-lg text-muted-foreground">{subheadline}</p>}
         </div>
-        <AnimatedTestimonials testimonials={testimonials} autoplay={autoplay} />
+        <AnimatedTestimonials testimonials={testimonials || []} autoplay={autoplay} />
       </div>
     </section>
   );

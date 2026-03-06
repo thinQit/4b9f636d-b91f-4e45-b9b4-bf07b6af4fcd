@@ -2,28 +2,27 @@
 
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
-import { cva, type VariantProps } from "class-variance-authority";
+import { cva, VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center rounded-lg px-6 py-3 font-semibold tracking-tight ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center whitespace-nowrap rounded-xl px-6 py-3 font-semibold tracking-tight transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
         default: "bg-primary text-primary-foreground hover:bg-primary/90",
-        secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         outline:
-          "border border-input bg-background hover:bg-muted hover:text-foreground",
-        ghost:
-          "bg-transparent hover:bg-muted hover:text-foreground",
-        destructive:
-          "bg-destructive text-white hover:bg-destructive/80",
+          "border border-input bg-transparent hover:bg-accent hover:text-accent-foreground",
+        secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+        destructive: "bg-destructive text-white hover:bg-destructive/90",
+        ghost: "bg-transparent hover:bg-muted",
+        link: "underline-offset-4 hover:underline bg-transparent text-primary",
       },
       size: {
-        default: "h-11 px-6 py-3 text-sm",
-        sm: "h-9 px-4 py-2 text-sm",
+        default: "h-11 px-6 py-3 text-base",
+        sm: "h-9 px-3 py-2 text-sm",
         lg: "h-14 px-8 py-4 text-lg",
-        icon: "h-11 w-11 p-0",
+        icon: "h-9 w-9 p-0",
       },
     },
     defaultVariants: {
@@ -49,7 +48,6 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <Comp
         className={cn(buttonVariants({ variant, size }), className)}
         ref={ref}
-        type={asChild ? undefined : (props.type ?? "button")}
         {...props}
       />
     );

@@ -1,28 +1,34 @@
 export const dynamic = 'force-dynamic';
 
-import HeroGradient from "@/components/HeroGradient"
-import ContactForm from "@/components/ContactForm"
-import MapEmbed from "@/components/MapEmbed"
+import Hero from "@/components/Hero";
+import ContactForm from "@/components/ContactForm";
+import MapEmbed from "@/components/MapEmbed";
+import CTASparkles from "@/components/CTASparkles";
+import SEOHead from "@/components/SEOHead";
 
 export default function ContactPage() {
   return (
-    <div>
-      <HeroGradient
-        headline="Contact NeonCart support"
-        subheadline="Questions about shipping, returns, or product compatibility? We reply within 1 business day."
-        primaryCta={{ label: "Email support", href: "mailto:support@neoncart.co" }}
-        secondaryCta={{ label: "View store details", href: "/store-details" }}
-      />
+    <main>
+      <SEOHead />
+      <Hero />
       <ContactForm
-        headline="Send a message"
-        subheadline="Include your order number (if you have one) so we can help faster."
+        headline="Contact form"
+        subheadline="For returns, exchanges, shipping questions, or product recommendations."
         contactInfo={[
-          { icon: "Mail", label: "Support email", value: "support@neoncart.co" },
-          { icon: "Phone", label: "Support phone", value: "+1 (512) 555-0199" },
-          { icon: "Clock", label: "Hours", value: "Mon–Fri 9:00am–5:00pm CT" },
+          { icon: "Mail", label: "Email", value: "support@indigoskyshop.com" },
+          { icon: "Phone", label: "Phone", value: "+1 (512) 555-0148" },
+          { icon: "Clock", label: "Hours", value: "Mon–Fri, 9:00 AM–5:00 PM CT" },
         ]}
       />
       <MapEmbed />
-    </div>
-  )
+      <CTASparkles
+        title="Prefer self-serve?"
+        subtitle="Check shipping, returns, and FAQs in Store Details—built to answer questions fast."
+        ctaLabel="Store Details"
+        ctaHref="/store/details"
+        secondaryCtaLabel="Shop the Store"
+        secondaryCtaHref="/store"
+      />
+    </main>
+  );
 }

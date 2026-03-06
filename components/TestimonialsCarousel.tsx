@@ -1,61 +1,39 @@
 'use client'
 
-import { useState } from 'react'
-import { ChevronLeft, ChevronRight, Star } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import { cn } from '@/lib/utils'
-
-interface Testimonial {
-  id: string
-  name: string
-  location: string
-  quote: string
-  rating: number
-}
+import React from 'react'
+import { AnimatedTestimonials } from '@/components/ui/animated-testimonials'
 
 interface TestimonialsCarouselProps {
-  testimonials?: Testimonial[]
-  className?: string
+  items?: { quote: string; name: string; designation: string; src: string }[]
 }
 
 export default function TestimonialsCarousel({
-  testimonials = [
-    { id: '1', name: 'Maya T.', location: 'Austin, TX', quote: 'The quality is consistently excellent and shipping is always fast.', rating: 5 },
-    { id: '2', name: 'Jordan P.', location: 'Seattle, WA', quote: 'Best everyday basics I have purchased in years. True to size and durable.', rating: 5 },
-    { id: '3', name: 'Elena R.', location: 'Chicago, IL', quote: 'Great customer support and easy returns. I shop here every season.', rating: 4 },
+  items = [
+    {
+      quote: 'My order arrived in two days and quality was fantastic.',
+      name: 'Amanda R.',
+      designation: 'Verified Buyer',
+      src: 'https://res.cloudinary.com/dwc294mzm/image/upload/c_fill,w_1000,h_750,g_auto/v1/site-images/corporate/default.jpg',
+    },
+    {
+      quote: 'Checkout was seamless and customer support was super helpful.',
+      name: 'David K.',
+      designation: 'Returning Customer',
+      src: 'https://res.cloudinary.com/dwc294mzm/image/upload/c_fill,w_1000,h_750,g_auto/v1/site-images/corporate/default.jpg',
+    },
+    {
+      quote: 'Best product selection and fair prices. Highly recommended.',
+      name: 'Priya N.',
+      designation: 'Frequent Shopper',
+      src: 'https://res.cloudinary.com/dwc294mzm/image/upload/c_fill,w_800,h_800,g_auto/v1/site-images/corporate/default.jpg',
+    },
   ],
-  className = '',
 }: Partial<TestimonialsCarouselProps>) {
-  const [index, setIndex] = useState(0)
-  const item = testimonials[index] || testimonials[0]
-
   return (
-    <section className={cn('py-20 md:py-28', className)}>
-      <div className="mx-auto max-w-3xl px-4">
-        <Card className="rounded-xl border bg-white p-8 text-center shadow-sm">
-          <div className="mb-4 flex justify-center gap-1">
-            {Array.from({ length: item?.rating || 5 }).map((_, i) => (
-              <Star key={i} className="h-5 w-5 fill-yellow-400 text-yellow-400" />
-            ))}
-          </div>
-          <p className="text-lg leading-relaxed text-[#1A1A2E]">“{item?.quote || ''}”</p>
-          <p className="mt-5 text-sm font-semibold text-[#1A1A2E]">{item?.name || ''}</p>
-          <p className="text-sm text-muted-foreground">{item?.location || ''}</p>
-        </Card>
-
-        <div className="mt-6 flex items-center justify-center gap-3">
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => setIndex((index - 1 + testimonials.length) % testimonials.length)}
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </Button>
-          <Button variant="outline" size="icon" onClick={() => setIndex((index + 1) % testimonials.length)}>
-            <ChevronRight className="h-4 w-4" />
-          </Button>
-        </div>
+    <section className="py-20 md:py-28">
+      <div className="mx-auto max-w-7xl px-4 md:px-6">
+        <h2 className="mb-8 text-2xl font-bold text-[#1A1A2E] md:text-3xl">What Customers Say</h2>
+        <AnimatedTestimonials testimonials={items} />
       </div>
     </section>
   )

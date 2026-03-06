@@ -1,8 +1,6 @@
-# NeonCart Commerce
+# Indigo Sky Shop
 
-Next.js 14 + TypeScript + Tailwind + shadcn/ui scaffold for the NeonCart marketing storefront.
+Next.js 14 + TypeScript + Tailwind CSS + shadcn/ui scaffold for Indigo Sky Shop.
 
-## Setup
+## Getting Started
 
-1. Install dependencies:
-   

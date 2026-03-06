@@ -1,39 +1,34 @@
 "use client";
 
-import Link from 'next/link'
+import React from 'react'
 import { Button } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
 
 interface CTASectionProps {
   title?: string
   description?: string
-  ctaLabel?: string
-  ctaHref?: string
-  useGradient?: boolean
-  className?: string
+  primaryText?: string
+  secondaryText?: string
 }
 
 export default function CTASection({
-  title = 'Refresh Your Wardrobe for the New Season',
-  description = 'Discover limited-run essentials crafted to last. Shop now before sizes sell out.',
-  ctaLabel = 'Shop Collection',
-  ctaHref = '/collections/new',
-  useGradient = true,
-  className = '',
+  title = 'Ready to upgrade your everyday essentials?',
+  description = 'Shop curated picks trusted by thousands of happy customers.',
+  primaryText = 'Shop Now',
+  secondaryText = 'Learn More',
 }: Partial<CTASectionProps>) {
   return (
-    <section className={cn('py-20 md:py-28', className)}>
-      <div
-        className={cn(
-          'mx-auto max-w-7xl rounded-2xl px-6 py-12 text-center md:px-10',
-          useGradient ? 'bg-gradient-to-r from-[#1A1A2E] to-[#E63946] text-white' : 'border bg-white'
-        )}
-      >
-        <h2 className="text-3xl font-bold tracking-tight md:text-4xl">{title}</h2>
-        <p className={cn('mx-auto mt-3 max-w-2xl', useGradient ? 'text-white/90' : 'text-muted-foreground')}>{description}</p>
-        <Button asChild className={cn('mt-6', useGradient ? 'bg-white text-[#1A1A2E] hover:bg-white/90' : 'bg-[#E63946] hover:bg-[#d83240]')}>
-          <Link href={ctaHref}>{ctaLabel}</Link>
-        </Button>
+    <section className="py-20 md:py-28">
+      <div className="mx-auto max-w-7xl px-4 md:px-6">
+        <div className="rounded-3xl bg-gradient-to-r from-[#1A1A2E] to-[#E63946] p-8 text-white md:p-12">
+          <h2 className="text-3xl font-bold tracking-tight">{title}</h2>
+          <p className="mt-2 max-w-2xl text-white/85">{description}</p>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Button className="rounded-xl bg-white text-[#1A1A2E] hover:bg-white/90">{primaryText}</Button>
+            <Button variant="outline" className="rounded-xl border-white text-white hover:bg-white/10">
+              {secondaryText}
+            </Button>
+          </div>
+        </div>
       </div>
     </section>
   )

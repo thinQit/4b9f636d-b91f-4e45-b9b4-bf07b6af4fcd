@@ -1,5 +1,6 @@
 'use client';
 
+import { Mail, MapPin, Phone, MessageCircle, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -19,16 +20,19 @@ interface ContactFormProps {
 }
 
 export default function ContactForm({
-  headline = 'Need Help? We’re Here for You',
-  subheadline = 'Send us a message and our support team will get back to you shortly.',
-  contactInfo = [
-    { icon: '📞', label: 'Phone', value: '+1 (800) 555-0199' },
-    { icon: '✉️', label: 'Email', value: 'support@shopnova.com' },
-    { icon: '📍', label: 'Address', value: '120 Market Street, San Francisco, CA' },
-  ],
+  headline = 'Need Help With Your Order?',
+  subheadline = 'Our support team is here to help with shipping, returns, and product questions.',
+  contactInfo = [],
 }: Partial<ContactFormProps>) {
+  const iconMap: Record<string, React.ElementType> = { Clock, 
+    Mail,
+    Phone,
+    MapPin,
+    MessageCircle,
+  };
+
   return (
-    <section className="bg-muted/50 py-20 md:py-28" id="contact">
+    <section className="bg-muted/50 py-20 md:py-28">
       <div className="container mx-auto max-w-7xl px-4">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl">{headline}</h2>
@@ -45,7 +49,7 @@ export default function ContactForm({
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
-                    <Input id="email" type="email" placeholder="your@email.com" />
+                    <Input id="email" type="email" placeholder="you@example.com" />
                   </div>
                 </div>
                 <div className="space-y-2">
@@ -56,7 +60,7 @@ export default function ContactForm({
                   <Label htmlFor="message">Message</Label>
                   <Textarea id="message" placeholder="Tell us more..." rows={5} />
                 </div>
-                <Button type="submit" className="w-full">
+                <Button type="submit" className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
                   Send Message
                 </Button>
               </form>
@@ -65,9 +69,12 @@ export default function ContactForm({
           {contactInfo && contactInfo.length > 0 && (
             <div className="flex flex-col justify-center space-y-8">
               {contactInfo.map(function (info, i) {
+                const Icon = iconMap[info.icon] || MessageCircle;
                 return (
                   <div key={i} className="flex items-start gap-4">
-                    <span className="text-2xl">{info.icon}</span>
+                    <div className="rounded-full bg-amber-100 p-2 text-amber-700">
+                      <Icon className="h-5 w-5" />
+                    </div>
                     <div>
                       <p className="font-semibold text-foreground">{info.label}</p>
                       <p className="text-muted-foreground">{info.value}</p>

@@ -16,16 +16,12 @@ interface FAQAccordionProps {
 export default function FAQAccordion({
   headline = 'Frequently Asked Questions',
   subheadline = 'Everything you need to know before placing your order.',
-  items = [
-    { question: 'How long does shipping take?', answer: 'Most orders ship within 24 hours and arrive in 3–5 business days.' },
-    { question: 'Can I return a product?', answer: 'Yes. We offer easy 30-day returns on eligible items in original condition.' },
-    { question: 'Do you offer secure checkout?', answer: 'Absolutely. All transactions are encrypted and processed through trusted payment providers.' },
-  ],
+  items = [],
 }: Partial<FAQAccordionProps>) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <section className="py-20 md:py-28" id="faq">
+    <section className="py-20 md:py-28">
       <div className="container mx-auto max-w-3xl px-4">
         <div className="text-center">
           <h2 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl">{headline}</h2>
@@ -35,7 +31,7 @@ export default function FAQAccordion({
           {items.map(function (item, i) {
             var isOpen = openIndex === i;
             return (
-              <div key={i} className="rounded-lg border bg-background">
+              <div key={i} className="rounded-xl border border-border bg-background">
                 <button
                   className="flex w-full items-center justify-between p-5 text-left"
                   onClick={function () {
@@ -44,7 +40,7 @@ export default function FAQAccordion({
                   aria-expanded={isOpen}
                 >
                   <span className="text-base font-medium text-foreground">{item.question}</span>
-                  <span className={'text-muted-foreground transition-transform ' + (isOpen ? 'rotate-180' : '')}>&#9660;</span>
+                  <span className={'text-amber-500 transition-transform ' + (isOpen ? 'rotate-180' : '')}>&#9660;</span>
                 </button>
                 {isOpen && (
                   <div className="px-5 pb-5">

@@ -1,39 +1,50 @@
-import "./globals.css"
-import { Inter, DM_Sans } from "next/font/google"
-import NavbarSticky from "@/components/NavbarSticky"
-import FooterMultiColumn from "@/components/FooterMultiColumn"
+import "./globals.css";
+import { DM_Sans, Inter } from "next/font/google";
+import NavbarSticky from "@/components/NavbarSticky";
+import FooterMultiColumn from "@/components/FooterMultiColumn";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" })
-const dmSans = DM_Sans({ subsets: ["latin"], variable: "--font-dm-sans" })
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  variable: "--font-dm-sans",
+});
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+});
+
+export default function RootLayout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${dmSans.variable} bg-background text-foreground antialiased`}>
+      <body className={`${dmSans.variable} ${inter.variable} antialiased bg-[#F8F9FA] text-[#1A1A2E]`}>
         <NavbarSticky
-          logo="NeonCart"
+          logo="Indigo Sky Shop"
           navItems={[
             { label: "Home", href: "/" },
-            { label: "Shop", href: "/store" },
-            { label: "Store Details", href: "/store-details" },
+            { label: "Store", href: "/store" },
+            { label: "Store Details", href: "/store/details" },
             { label: "Testimonials", href: "/testimonials" },
             { label: "About", href: "/about" },
             { label: "Contact", href: "/contact" },
+            { label: "SEO", href: "/seo" },
           ]}
-          ctaLabel="Shop now"
-          ctaHref="/store"
+          ctaLabel="Shop Best Sellers"
+          ctaHref="/store?sort=best"
         />
-        <main>{children}</main>
+        {children}
         <FooterMultiColumn
-          brand="NeonCart"
-          description="Curated essentials for modern life."
+          brand="Indigo Sky Shop"
+          description="Modern essentials, fast shipping, and a checkout you can trust."
           columns={[
             {
               title: "Shop",
               links: [
-                { label: "All products", href: "/store" },
-                { label: "Best sellers", href: "/store?sort=best-sellers" },
-                { label: "New arrivals", href: "/store?sort=new" },
+                { label: "Store", href: "/store" },
+                { label: "Best Sellers", href: "/store?sort=best" },
+                { label: "Charging", href: "/store?category=charging" },
+                { label: "Travel", href: "/store?category=travel" },
               ],
             },
             {
@@ -42,20 +53,22 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 { label: "About", href: "/about" },
                 { label: "Testimonials", href: "/testimonials" },
                 { label: "Contact", href: "/contact" },
+                { label: "SEO", href: "/seo" },
               ],
             },
             {
-              title: "Help",
+              title: "Support",
               links: [
-                { label: "Shipping & returns", href: "/store-details#shipping" },
-                { label: "FAQ", href: "/store-details#faq" },
-                { label: "Privacy", href: "/store-details#privacy" },
+                { label: "Store Details", href: "/store/details" },
+                { label: "Shipping & Returns", href: "/store/details#shipping" },
+                { label: "FAQ", href: "/store/details#faq" },
+                { label: "Email Support", href: "mailto:support@indigoskyshop.com" },
               ],
             },
           ]}
-          copyright="© 2026 NeonCart Commerce. All rights reserved."
+          copyright="© 2026 Indigo Sky Shop. All rights reserved."
         />
       </body>
     </html>
-  )
+  );
 }

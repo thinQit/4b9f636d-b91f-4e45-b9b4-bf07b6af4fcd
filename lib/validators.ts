@@ -1,49 +1,38 @@
 import { z } from "zod";
 
-export const contactTopicEnum = z.enum([
-  "Order status",
-  "Returns",
-  "Warranty",
-  "Product question",
-  "Wholesale",
-  "UGC / Press",
-  "Newsletter",
-  "Shipping",
-  "Privacy",
-  "Review",
-]);
-
 export const contactSubmissionSchema = z.object({
-  name: z.string().trim().min(2, "Name must be at least 2 characters").max(100),
-  email: z.string().trim().email("Invalid email address").max(255),
-  topic: contactTopicEnum,
-  orderNumber: z
-    .string()
-    .trim()
-    .max(64, "Order number is too long")
-    .optional()
-    .or(z.literal("")),
-  message: z.string().trim().min(10, "Message must be at least 10 characters").max(5000),
+  name: z.string().trim().min(2).max(120),
+  email: z.string().trim().email().max(255),
+  topic: z.enum([
+    "Order status",
+    "Returns & exchanges",
+    "Product recommendation",
+    "Wholesale inquiry",
+    "Other",
+  ]),
+  orderNumber: z.string().trim().max(100).optional().or(z.literal("")),
+  message: z.string().trim().min(10).max(5000),
+});
+
+export const newsletterSchema = z.object({
+  email: z.string().trim().email().max(255),
 });
 
 export const productsQuerySchema = z.object({
-  category: z
+  category: z.string().trim().min(1).max(100).optional(),
+  minPrice: z.coerce.number().int().min(0).optional(),
+  maxPrice: z.coerce.number().int().min(0).optional(),
+  rating: z.coerce.number().min(0).max(5).optional(),
+  inStock: z
     .string()
-    .trim()
-    .toLowerCase()
-    .optional(),
-  sort: z
-    .enum(["best-sellers", "top-rated", "price-low", "price-high", "new"])
-    .optional(),
-  q: z.string().trim().toLowerCase().optional(),
-  minPrice: z.coerce.number().min(0).optional(),
-  maxPrice: z.coerce.number().min(0).optional(),
+    .optional()
+    .transform((value) => (value === undefined ? undefined : value === "true")),
+  search: z.string().trim().min(1).max(120).optional(),
+  sort: z.enum(["best", "new", "price-asc", "price-desc", "rating"]).optional(),
+  limit: z.coerce.number().int().min(1).max(100).default(24),
+  page: z.coerce.number().int().min(1).default(1),
 });
 
-export const productSlugParamsSchema = z.object({
-  slug: z.string().trim().min(1),
+export const productSlugSchema = z.object({
+  slug: z.string().trim().min(1).max(200),
 });
-
-export type ContactSubmissionInput = z.infer<typeof contactSubmissionSchema>;
-export type ProductsQueryInput = z.infer<typeof productsQuerySchema>;
-export type ProductSlugParamsInput = z.infer<typeof productSlugParamsSchema>;

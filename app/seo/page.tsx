@@ -1,57 +1,40 @@
 export const dynamic = 'force-dynamic';
 
-import HeroGradient from "@/components/HeroGradient";
-import CTABanner from "@/components/CTABanner";
-import type { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "SEO & metadata | NeonCart Commerce",
-  description:
-    "Manage page titles, descriptions, and social previews for NeonCart. See route-by-route metadata recommendations for optimal SEO and social sharing.",
-  openGraph: {
-    title: "SEO & metadata | NeonCart Commerce",
-    description:
-      "Manage page titles, descriptions, and social previews for NeonCart. See route-by-route metadata recommendations.",
-    url: "https://neoncart.co/seo",
-    images: [
-      {
-        url: "/images/og/home.jpg",
-        width: 1600,
-        height: 900,
-        alt: "NeonCart Commerce | Modern Essentials, Fast Shipping",
-      },
-    ],
-    siteName: "NeonCart Commerce",
-    type: "website",
-  },
-  alternates: { canonical: "https://neoncart.co/seo" },
-  twitter: {
-    card: "summary_large_image",
-    title: "SEO & metadata | NeonCart Commerce",
-    description:
-      "Manage page titles, descriptions, and social previews for NeonCart. See route-by-route metadata recommendations.",
-    images: ["/images/og/home.jpg"],
-  },
-};
+import HeroSpotlight from "@/components/HeroSpotlight";
+import CTASparkles from "@/components/CTASparkles";
+import SEOHead from "@/components/SEOHead";
 
 export default function SEOPage() {
   return (
-    <div>
-      <HeroGradient
-        headline="SEO & metadata"
-        subheadline="A single place to manage titles, descriptions, and social previews for key pages."
-        primaryCta={{ label: "View store", href: "/store" }}
-        secondaryCta={{ label: "Contact", href: "/contact" }}
+    <main>
+      <SEOHead />
+      <HeroSpotlight
+        title="SEO metadata management (site-wide)."
+        subtitle="A single source of truth for titles, descriptions, Open Graph, and JSON-LD—kept consistent across pages and products."
+        primaryCta={{ label: "View Store", href: "/store" }}
+        secondaryCta={{ label: "Contact Support", href: "/contact" }}
       />
-      {/* Additional page content or tables for recommended metadata can be added here as needed */}
-      <CTABanner
-        headline="Ready to optimize and convert?"
-        description="Use clean metadata and consistent page structure to improve discoverability."
-        ctaLabel="Shop best sellers"
-        ctaHref="/store?sort=best-sellers"
-        secondaryCtaLabel="Store details"
-        secondaryCtaHref="/store-details"
+      <section className="py-20 md:py-28">
+        <div className="mx-auto max-w-7xl px-4 md:px-6">
+          <h2 className="text-3xl md:text-4xl font-bold">Metadata inventory</h2>
+          <p className="mt-4 text-muted-foreground">What we manage and where it appears.</p>
+          <ul className="mt-6 space-y-3 text-muted-foreground list-disc pl-5">
+            <li>Title tags: Benefit-led titles with category/product keywords and brand suffix.</li>
+            <li>Meta descriptions: Conversion-focused summaries with shipping/returns trust cues.</li>
+            <li>Open Graph / Twitter: Share-ready images and copy for social previews.</li>
+            <li>Canonical URLs: Prevents duplicate content across filters/sorts.</li>
+            <li>Structured data (JSON-LD): Product schema with price, availability, and aggregateRating when available.</li>
+          </ul>
+        </div>
+      </section>
+      <CTASparkles
+        title="Want SEO tuned to your next campaign?"
+        subtitle="We’ll align metadata with seasonal promos and new collections every quarter."
+        ctaLabel="Plan Next Update"
+        ctaHref="/contact?topic=Other"
+        secondaryCtaLabel="Shop Best Sellers"
+        secondaryCtaHref="/store?sort=best"
       />
-    </div>
+    </main>
   );
 }

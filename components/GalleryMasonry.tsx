@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
 import Image from 'next/image';
+import { useState } from 'react';
 
 interface GalleryImage {
   url: string;
@@ -16,13 +16,9 @@ interface GalleryMasonryProps {
 }
 
 export default function GalleryMasonry({
-  headline = 'Shop the Look',
-  subheadline = 'A closer look at our featured collections and customer favorites.',
-  images = [
-    { url: 'https://res.cloudinary.com/dwc294mzm/image/upload/c_fill,w_800,h_800,g_auto/v1/site-images/corporate/default.jpg', alt: 'Featured product collection', caption: 'Top picks this week' },
-    { url: 'https://res.cloudinary.com/dwc294mzm/image/upload/c_fill,w_1200,h_675,g_auto/v1/site-images/corporate/default.jpg', alt: 'Lifestyle hero products', caption: 'Quality you can trust' },
-    { url: 'https://res.cloudinary.com/dwc294mzm/image/upload/c_fill,w_1000,h_750,g_auto/v1/site-images/corporate/default.jpg', alt: 'Brand showcase', caption: 'Made for everyday life' },
-  ],
+  headline = 'Customer Favorites',
+  subheadline = 'Explore top-rated picks and new arrivals.',
+  images = [],
 }: Partial<GalleryMasonryProps>) {
   const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null);
 
@@ -43,7 +39,14 @@ export default function GalleryMasonry({
                   setSelectedImage(img);
                 }}
               >
-                <Image src={img.url} alt={img.alt} fill className="object-cover transition-transform duration-300 group-hover:scale-105" />
+                <Image
+                  src={img.url}
+                  alt={img.alt}
+                  width={800}
+                  height={800}
+                  unoptimized
+                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                />
                 <div className="absolute inset-0 bg-black/0 transition-all group-hover:bg-black/30" />
                 {img.caption && (
                   <div className="absolute bottom-0 left-0 right-0 translate-y-full p-4 transition-transform group-hover:translate-y-0">
@@ -61,7 +64,14 @@ export default function GalleryMasonry({
               setSelectedImage(null);
             }}
           >
-            <Image src={selectedImage.url} alt={selectedImage.alt} width={1400} height={900} className="max-h-[85vh] max-w-[90vw] rounded-lg object-contain" />
+            <Image
+              src={selectedImage.url}
+              alt={selectedImage.alt}
+              width={1400}
+              height={900}
+              unoptimized
+              className="max-h-[85vh] max-w-[90vw] rounded-lg object-contain"
+            />
           </div>
         )}
       </div>

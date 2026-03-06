@@ -18,19 +18,14 @@ interface NavbarStickyProps {
 
 export default function NavbarSticky({
   logo = 'ShopNova',
-  navItems = [
-    { label: 'Home', href: '#home' },
-    { label: 'Categories', href: '#categories' },
-    { label: 'Featured', href: '#featured-products' },
-    { label: 'Reviews', href: '#testimonials' },
-  ],
+  navItems = [],
   ctaLabel = 'Shop Now',
   ctaHref = '#featured-products',
 }: Partial<NavbarStickyProps>) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md">
+    <header className="sticky top-0 z-50 w-full border-b border-border bg-background/90 backdrop-blur-md">
       <div className="container mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
         <Link href="/" className="text-xl font-bold text-foreground">
           {logo}
@@ -38,13 +33,17 @@ export default function NavbarSticky({
         <nav className="hidden items-center gap-6 md:flex">
           {navItems.map(function (item) {
             return (
-              <Link key={item.href} href={item.href} className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
+              <Link
+                key={item.href}
+                href={item.href}
+                className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+              >
                 {item.label}
               </Link>
             );
           })}
           {ctaLabel && ctaHref && (
-            <Button asChild>
+            <Button asChild className="bg-primary text-primary-foreground hover:bg-primary/90">
               <a href={ctaHref}>{ctaLabel}</a>
             </Button>
           )}
@@ -56,7 +55,7 @@ export default function NavbarSticky({
           }}
           aria-label="Toggle menu"
         >
-          <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="h-6 w-6 text-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             {mobileOpen ? (
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             ) : (
@@ -66,14 +65,14 @@ export default function NavbarSticky({
         </button>
       </div>
       {mobileOpen && (
-        <div className="border-t bg-background md:hidden">
+        <div className="border-t border-border bg-background md:hidden">
           <nav className="container mx-auto flex flex-col gap-4 px-4 py-4">
             {navItems.map(function (item) {
               return (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="text-sm font-medium text-muted-foreground"
+                  className="text-sm font-medium text-muted-foreground hover:text-primary"
                   onClick={function () {
                     setMobileOpen(false);
                   }}
@@ -83,7 +82,7 @@ export default function NavbarSticky({
               );
             })}
             {ctaLabel && ctaHref && (
-              <Button className="w-full" asChild>
+              <Button className="w-full bg-primary text-primary-foreground" asChild>
                 <a href={ctaHref}>{ctaLabel}</a>
               </Button>
             )}

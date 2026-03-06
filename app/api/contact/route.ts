@@ -1,81 +1,73 @@
 import { NextResponse } from "next/server";
+import { db } from "@/lib/db";
 import { contactSubmissionSchema } from "@/lib/validators";
 
-export async function POST(request: Request) {
+async function sendContactNotificationEmail(payload: {
+  name: string;
+  email: string;
+  topic: string;
+  orderNumber?: string;
+  message: string;
+}) {
+  const webhook = process.env.CONTACT_NOTIFICATION_WEBHOOK_URL;
+  if (!webhook) return;
+
+  await fetch(webhook, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      subject: `New contact submission: ${payload.topic}`,
+      from: payload.email,
+      name: payload.name,
+      orderNumber: payload.orderNumber || null,
+      message: payload.message,
+    }),
+  });
+}
+
+export async function POST(req: Request) {
   try {
-    const body = await request.json();
+    const body = await req.json();
     const parsed = contactSubmissionSchema.safeParse(body);
 
     if (!parsed.success) {
       return NextResponse.json(
-        {
-          success: false,
-          error: "Invalid input",
-          details: parsed.error.flatten(),
-        },
+        { error: "Invalid input", details: parsed.error.flatten() },
         { status: 400 }
       );
     }
 
     const { name, email, topic, orderNumber, message } = parsed.data;
 
-    const resendApiKey = process.env.RESEND_API_KEY;
-    const supportEmail = process.env.SUPPORT_EMAIL || "support@neoncart.co";
+    const submission = await db.contactSubmission.create({
+      data: {
+        name,
+        email,
+        topic,
+        orderNumber: orderNumber || null,
+        message,
+      },
+    });
 
-    if (resendApiKey) {
-      const emailPayload = {
-        from: process.env.RESEND_FROM_EMAIL || "NeonCart <no-reply@neoncart.co>",
-        to: [supportEmail],
-        subject: `[Contact] ${topic} - ${name}`,
-        reply_to: email,
-        text: `New contact form submission
-
-Name: ${name}
-Email: ${email}
-Topic: ${topic}
-Order Number: ${orderNumber || "N/A"}
-
-Message:
-${message}
-`,
-      };
-
-      const sendResult = await fetch("https://api.resend.com/emails", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${resendApiKey}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(emailPayload),
+    try {
+      await sendContactNotificationEmail({
+        name,
+        email,
+        topic,
+        orderNumber: orderNumber || undefined,
+        message,
       });
-
-      if (!sendResult.ok) {
-        const errorText = await sendResult.text();
-        return NextResponse.json(
-          {
-            success: false,
-            error: "Failed to deliver message",
-            providerError: errorText,
-          },
-          { status: 502 }
-        );
-      }
+    } catch {
+      // Non-fatal notification failure
     }
 
     return NextResponse.json(
-      {
-        success: true,
-        message: "Your message has been received.",
-      },
-      { status: 200 }
+      { success: true, id: submission.id, message: "Submission received." },
+      { status: 201 }
     );
   } catch (error) {
-    console.error("POST /api/contact error:", error);
     return NextResponse.json(
-      {
-        success: false,
-        error: "Internal server error",
-      },
+      { error: "Failed to submit contact form." },
       { status: 500 }
     );
   }
