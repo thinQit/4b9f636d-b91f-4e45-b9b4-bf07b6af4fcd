@@ -1,0 +1,47 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&family=Inter:wght@400;500;600;700;800&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 210 14% 98%;
+    --foreground: 240 27% 14%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 39% 11%;
+
+    --primary: 244 76% 59%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 199 92% 60%;
+    --secondary-foreground: 218 49% 9%;
+
+    --accent: 160 84% 39%;
+    --accent-foreground: 162 75% 9%;
+
+    --muted: 213 27% 93%;
+    --muted-foreground: 220 9% 35%;
+
+    --destructive: 355 77% 56%;
+    --border: 220 13% 91%;
+    --ring: 244 76% 59%;
+
+    --radius: 0.875rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: "Inter", system-ui, -apple-system, sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: "DM Sans", "Inter", system-ui, sans-serif;
+    @apply tracking-tight;
+  }
+}
