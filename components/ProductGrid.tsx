@@ -1,39 +1,41 @@
 "use client";
 
 import ProductCard from '@/components/ProductCard'
-import { Button } from '@/components/ui/button'
 
-interface ProductItem {
+interface Product {
+  id: string
   name: string
+  price: string
   imageSrc: string
-  price: number
-  compareAt: number
   rating: number
-  badge: string
+  reviewCount: number
+  tag: string
 }
 
 interface ProductGridProps {
-  products?: ProductItem[]
+  products: Product[]
+  className: string
 }
 
 export default function ProductGrid({
   products = [
-    { name: 'Classic Hoodie', imageSrc: 'https://res.cloudinary.com/dwc294mzm/image/upload/c_fill,w_800,h_800,g_auto/v1/site-images/corporate/default.jpg', price: 58, compareAt: 72, rating: 4.8, badge: 'Sale' },
-    { name: 'Minimal Sneakers', imageSrc: 'https://res.cloudinary.com/dwc294mzm/image/upload/c_fill,w_1000,h_750,g_auto/v1/site-images/corporate/default.jpg', price: 94, compareAt: 120, rating: 4.6, badge: 'Popular' },
-    { name: 'Linen Shirt', imageSrc: 'https://res.cloudinary.com/dwc294mzm/image/upload/c_fill,w_1000,h_750,g_auto/v1/site-images/corporate/default.jpg', price: 42, compareAt: 52, rating: 4.7, badge: 'New' },
-    { name: 'Everyday Backpack', imageSrc: 'https://res.cloudinary.com/dwc294mzm/image/upload/c_fill,w_1200,h_675,g_auto/v1/site-images/corporate/default.jpg', price: 68, compareAt: 85, rating: 4.9, badge: 'Top Rated' },
+    { id: '1', name: 'Modern Resume Template', price: '$29', imageSrc: 'https://res.cloudinary.com/dwc294mzm/image/upload/c_fill,w_1000,h_750,g_auto/v1/site-images/corporate/default.jpg', rating: 4.9, reviewCount: 87, tag: 'New' },
+    { id: '2', name: 'Case Study Pack', price: '$59', imageSrc: 'https://res.cloudinary.com/dwc294mzm/image/upload/c_fill,w_800,h_800,g_auto/v1/site-images/corporate/default.jpg', rating: 4.7, reviewCount: 64, tag: 'Popular' },
+    { id: '3', name: 'Portfolio Starter Kit', price: '$79', imageSrc: 'https://res.cloudinary.com/dwc294mzm/image/upload/c_fill,w_1200,h_675,g_auto/v1/site-images/corporate/default.jpg', rating: 4.8, reviewCount: 132, tag: 'Best Seller' },
   ],
+  className = '',
 }: Partial<ProductGridProps>) {
   return (
-    <section>
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 lg:gap-6">
-        {products.map((p) => (
-          <ProductCard key={p.name} {...p} />
+    <div className={className}>
+      <div className="mb-5 flex items-center justify-between">
+        <h2 className="text-2xl font-bold text-[#1A1A2E]">Featured Products</h2>
+        <p className="text-sm text-slate-500">Filters and sort hooks ready</p>
+      </div>
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+        {products.map((product) => (
+          <ProductCard key={product.id} {...product} />
         ))}
       </div>
-      <div className="mt-6 flex justify-center">
-        <Button variant="outline">Load More</Button>
-      </div>
-    </section>
+    </div>
   )
 }

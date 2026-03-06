@@ -1,26 +1,20 @@
 "use client"
 
-import { useEffect } from "react"
 import { Button } from "@/components/ui/button"
 
 export default function Error({
-  error,
   reset,
 }: {
   error: Error & { digest?: string }
   reset: () => void
 }) {
-  useEffect(() => {
-    console.error(error)
-  }, [error])
-
   return (
-    <main className="mx-auto max-w-7xl px-4 py-20 md:py-28 text-center">
-      <h1 className="text-3xl md:text-4xl font-bold">Something went wrong</h1>
-      <p className="mt-4 text-muted-foreground">
+    <main className="mx-auto flex min-h-[60vh] max-w-3xl flex-col items-center justify-center px-6 text-center">
+      <h1 className="text-3xl font-bold text-slate-900">Something went wrong</h1>
+      <p className="mt-3 text-slate-600">
         We couldn’t load this page right now. Please try again.
       </p>
-      <Button className="mt-6" onClick={reset}>
+      <Button onClick={reset} className="mt-6">
         Try again
       </Button>
     </main>

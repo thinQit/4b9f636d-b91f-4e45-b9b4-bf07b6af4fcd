@@ -1,17 +1,15 @@
 import "./globals.css"
-import { DM_Sans, Inter } from "next/font/google"
+import { Inter } from "next/font/google"
 import NavbarSticky from "@/components/NavbarSticky"
 import FooterMultiColumn from "@/components/FooterMultiColumn"
 
-const dmSans = DM_Sans({
-  subsets: ["latin"],
-  variable: "--font-heading",
-})
+const inter = Inter({ subsets: ["latin"] })
 
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-body",
-})
+export const metadata = {
+  title: "Parv — Portfolio + Storefront",
+  description:
+    "Modern portfolio and digital product storefront. Explore projects, skills, testimonials, and download-ready templates built for Tailwind + shadcn.",
+}
 
 export default function RootLayout({
   children,
@@ -20,52 +18,52 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${dmSans.variable} ${inter.variable} bg-background text-foreground`}>
+      <body className={inter.className}>
         <NavbarSticky
-          logo="NovaCart"
+          logo="Parv"
           navItems={[
             { label: "Home", href: "/" },
-            { label: "Store", href: "/store" },
-            { label: "Store Details", href: "/store-details" },
-            { label: "About", href: "/about" },
+            { label: "About Me", href: "/about" },
+            { label: "Projects", href: "/projects" },
+            { label: "Skills", href: "/skills" },
             { label: "Testimonials", href: "/testimonials" },
+            { label: "Store", href: "/store" },
             { label: "Contact", href: "/contact" },
-            { label: "SEO", href: "/seo" },
           ]}
-          ctaLabel="Shop Now"
+          ctaLabel="Browse Store"
           ctaHref="/store"
         />
         {children}
         <FooterMultiColumn
-          brand="NovaCart"
-          description="A clean, conversion-first storefront for modern essentials."
+          brand="Parv — Portfolio + Storefront"
+          description="A modern portfolio with a conversion-focused storefront for digital products."
           columns={[
             {
-              title: "Shop",
-              links: [
-                { label: "Store", href: "/store" },
-                { label: "Best Sellers", href: "/store?sort=best" },
-                { label: "New Arrivals", href: "/store?collection=new" },
-              ],
-            },
-            {
-              title: "Company",
+              title: "Pages",
               links: [
                 { label: "About", href: "/about" },
+                { label: "Projects", href: "/projects" },
+                { label: "Skills", href: "/skills" },
                 { label: "Testimonials", href: "/testimonials" },
                 { label: "Contact", href: "/contact" },
               ],
             },
             {
-              title: "Support",
+              title: "Store",
               links: [
-                { label: "Store Details", href: "/store-details" },
-                { label: "Shipping & Returns", href: "/store-details#shipping-returns" },
-                { label: "SEO", href: "/seo" },
+                { label: "All products", href: "/store" },
+                { label: "Store details", href: "/store/details" },
+              ],
+            },
+            {
+              title: "Social",
+              links: [
+                { label: "GitHub", href: "https://github.com/" },
+                { label: "LinkedIn", href: "https://www.linkedin.com/" },
               ],
             },
           ]}
-          copyright="© 2026 NovaCart. All rights reserved."
+          copyright="© 2026 Parv. All rights reserved."
         />
       </body>
     </html>

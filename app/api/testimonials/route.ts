@@ -1,24 +1,39 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { testimonialsQuerySchema } from "@/lib/validators";
 
-export async function GET() {
+export async function GET(req: Request) {
   try {
-    const testimonials = await db.testimonial.findMany({
-      orderBy: [{ createdAt: "desc" as const }],
-      include: {
-        product: {
-          select: {
-            id: true,
-            slug: true,
-            name: true,
-          },
-        },
-      },
+    const { searchParams } = new URL(req.url);
+
+    const parsed = testimonialsQuerySchema.safeParse({
+      featured: searchParams.get("featured") ?? undefined,
+      limit: searchParams.get("limit") ?? undefined,
     });
 
-    return NextResponse.json({ data: testimonials });
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: "Invalid query parameters", issues: parsed.error.flatten() },
+        { status: 400 }
+      );
+    }
+
+    const { featured, limit } = parsed.data;
+
+    const testimonials = await db.testimonial.findMany({
+      where: typeof featured === "boolean" ? { featured } : undefined,
+      orderBy: [{ createdAt: "desc" as const }],
+      take: limit && limit > 0 ? Math.min(limit, 50) : undefined,
+    });
+
+    return NextResponse.json({ data: testimonials }, { status: 200 });
   } catch (error) {
-    console.error("GET /api/testimonials error:", error);
-    return NextResponse.json({ error: "Failed to fetch testimonials" }, { status: 500 });
+    return NextResponse.json(
+      {
+        error: "Failed to fetch testimonials.",
+        details: error instanceof Error ? error.message : "Unknown error",
+      },
+      { status: 500 }
+    );
   }
 }

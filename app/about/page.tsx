@@ -1,67 +1,59 @@
 export const dynamic = 'force-dynamic';
 
 import HeroAurora from "@/components/HeroAurora"
-import TestimonialsAnimated from "@/components/TestimonialsAnimated"
+import FeaturesCards3D from "@/components/FeaturesCards3D"
 import CTASparkles from "@/components/CTASparkles"
-import SeoHead from "@/components/SeoHead"
-import JsonLd from "@/components/JsonLd"
 
 export default function AboutPage() {
   return (
     <main>
-      <SeoHead />
-      <JsonLd />
       <HeroAurora
-        badge="Our mission"
-        title="Designed for everyday life"
-        subtitle="NovaCart is a small team obsessed with clean design, honest materials, and products that hold up to real use."
-        primaryCta={{ label: "Shop Best Sellers", href: "/store?sort=best" }}
-        secondaryCta={{ label: "Meet the Team", href: "#team" }}
+        title="About Parv"
+        subtitle="A modern builder focused on websites that look sharp, load fast, and stay easy to update."
+        primaryCta={{ label: "See projects", href: "/projects" }}
+        secondaryCta={{ label: "Contact", href: "/contact" }}
       />
-      <section id="team" className="py-20 md:py-28 bg-muted/40">
-        <div className="mx-auto max-w-7xl px-4">
-          <TestimonialsAnimated
-            title="Meet the team"
-            subtitle="Small team, high standards."
-            testimonials={[
-              {
-                quote:
-                  "Former industrial designer focused on minimalist carry goods and durable materials.",
-                name: "Avery Chen",
-                designation: "Founder & Product Curator",
-                src: "/images/team/avery-chen.jpg",
-              },
-              {
-                quote:
-                  "Runs fulfillment and vendor coordination to keep shipping fast and reliable.",
-                name: "Samira Patel",
-                designation: "Operations Lead",
-                src: "/images/team/samira-patel.jpg",
-              },
-              {
-                quote:
-                  "Handles support, returns, and product guidance with a customer-first approach.",
-                name: "Noah Brooks",
-                designation: "Customer Experience",
-                src: "/images/team/noah-brooks.jpg",
-              },
-            ]}
-            autoplay
-          />
-        </div>
-      </section>
-      <section className="py-20 md:py-28">
-        <div className="mx-auto max-w-7xl px-4">
-          <CTASparkles
-            title="Ready to upgrade your everyday essentials?"
-            subtitle="Start with best-sellers or browse by category—either way, you’ll find fewer, better choices."
-            ctaLabel="Shop the Store"
-            ctaHref="/store"
-            secondaryCtaLabel="Read Testimonials"
-            secondaryCtaHref="/testimonials"
-          />
-        </div>
-      </section>
+
+      <FeaturesCards3D
+        badge="How I work"
+        title="A repeatable system for quarterly updates"
+        subtitle="Wireframes → design system → build → SEO → launch."
+        features={[
+          {
+            icon: "Target",
+            title: "Clarify goals + audience",
+            description:
+              "Align success metrics around leads, sales, and trust-building user flows.",
+          },
+          {
+            icon: "Palette",
+            title: "Build a design system",
+            description:
+              "Set tokens for color, spacing, typography, and components to avoid drift.",
+          },
+          {
+            icon: "Blocks",
+            title: "Component-driven build",
+            description:
+              "Reusable sections for faster delivery and consistent page quality.",
+          },
+          {
+            icon: "Gauge",
+            title: "SEO + performance pass",
+            description:
+              "Metadata, OpenGraph, structured data, and Core Web Vitals optimization.",
+          },
+        ]}
+      />
+
+      <CTASparkles
+        title="Resume and experience highlights"
+        subtitle="Download the latest PDF resume and review structured strengths for modern portfolio + storefront builds."
+        ctaLabel="Download PDF"
+        ctaHref="https://codexstudiofiles.blob.core.windows.net/discovery-attachments/a240ebe6-4b4e-461f-b612-c68bf8639300/4b9f636d-b91f-4e45-b9b4-bf07b6af4fcd/1772756664184-updated_resume_parv.pdf"
+        secondaryCtaLabel="Contact me"
+        secondaryCtaHref="/contact"
+      />
     </main>
   )
 }

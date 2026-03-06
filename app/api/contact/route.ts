@@ -1,73 +1,90 @@
-import { ContactTopic } from "@prisma/client";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { contactSubmissionSchema } from "@/lib/validators";
+import { assertServerEnv } from "@/lib/auth";
+import { contactSchema } from "@/lib/validators";
 
-const topicMap: Record<string, ContactTopic> = {
-  "order status": "ORDER_STATUS",
-  "returns & exchanges": "RETURNS_EXCHANGES",
-  "product question": "PRODUCT_QUESTION",
-  "bulk orders (10+)": "BULK_ORDERS",
-  recommendations: "RECOMMENDATIONS",
-  "press & partnerships": "PRESS_PARTNERSHIPS",
-  pickup: "PICKUP",
-  tracking: "TRACKING",
-  return: "RETURN_REQUEST",
-  other: "OTHER",
-};
-
-async function sendContactNotification(input: {
+async function sendContactNotificationEmail(input: {
   name: string;
   email: string;
-  topic: string;
-  orderNumber?: string;
+  company?: string | null;
+  budget: string;
   message: string;
+  newsletter: boolean;
 }) {
-  const webhookUrl = process.env.CONTACT_NOTIFICATION_WEBHOOK_URL;
-  if (!webhookUrl) return;
+  const webhookUrl = process.env.CONTACT_WEBHOOK_URL;
+  const notifyEmail = process.env.CONTACT_NOTIFY_EMAIL;
 
-  await fetch(webhookUrl, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(input),
-  });
+  if (!webhookUrl && !notifyEmail) {
+    return;
+  }
+
+  if (webhookUrl) {
+    await fetch(webhookUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        to: notifyEmail ?? "owner",
+        subject: `New inquiry from ${input.name}`,
+        replyTo: input.email,
+        payload: input,
+      }),
+    });
+  }
 }
 
-export async function POST(request: NextRequest) {
+export async function POST(req: Request) {
   try {
-    const body = await request.json();
-    const parsed = contactSubmissionSchema.safeParse(body);
+    assertServerEnv();
+
+    const json = await req.json();
+    const parsed = contactSchema.safeParse(json);
 
     if (!parsed.success) {
       return NextResponse.json(
-        { error: "Invalid request body", details: parsed.error.flatten() },
+        { error: "Invalid request body", issues: parsed.error.flatten() },
         { status: 400 }
       );
     }
 
-    const { name, email, topic, orderNumber, message } = parsed.data;
-
-    const submission = await db.contactSubmission.create({
+    const inquiry = await db.inquiry.create({
       data: {
-        name,
-        email,
-        topic: topicMap[topic] ?? "OTHER",
-        orderNumber: orderNumber || null,
-        message,
+        name: parsed.data.name,
+        email: parsed.data.email,
+        company: parsed.data.company || null,
+        budget: parsed.data.budget,
+        message: parsed.data.message,
+        newsletter: parsed.data.newsletter ?? false,
       },
     });
 
-    await sendContactNotification({
-      name,
-      email,
-      topic,
-      orderNumber: orderNumber || undefined,
-      message,
-    });
+    try {
+      await sendContactNotificationEmail({
+        name: inquiry.name,
+        email: inquiry.email,
+        company: inquiry.company,
+        budget: inquiry.budget,
+        message: inquiry.message,
+        newsletter: inquiry.newsletter,
+      });
+    } catch {
+      // notification failure should not block successful inquiry creation
+    }
 
-    return NextResponse.json({ success: true, id: submission.id }, { status: 201 });
+    return NextResponse.json(
+      {
+        success: true,
+        message: "Inquiry submitted successfully.",
+        data: { id: inquiry.id, createdAt: inquiry.createdAt },
+      },
+      { status: 201 }
+    );
   } catch (error) {
-    console.error("POST /api/contact error:", error);
-    return NextResponse.json({ error: "Failed to submit contact form" }, { status: 500 });
+    return NextResponse.json(
+      {
+        error: "Failed to submit inquiry.",
+        details: error instanceof Error ? error.message : "Unknown error",
+      },
+      { status: 500 }
+    );
   }
 }

@@ -1,48 +1,58 @@
 'use client'
 
 import Image from 'next/image'
-import { Star } from 'lucide-react'
-import { Card } from '@/components/ui/card'
+import { Star, ShoppingBag } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 
 interface ProductCardProps {
-  name?: string
-  imageSrc?: string
-  price?: number
-  compareAt?: number
-  rating?: number
-  badge?: string
-  onAdd?: () => void
+  name: string
+  price: string
+  imageSrc: string
+  rating: number
+  reviewCount: number
+  tag: string
+  onQuickAdd?: () => void
 }
 
 export default function ProductCard({
-  name = 'Everyday Tee',
+  name = 'Portfolio UI Kit',
+  price = '$49',
   imageSrc = 'https://res.cloudinary.com/dwc294mzm/image/upload/c_fill,w_800,h_800,g_auto/v1/site-images/corporate/default.jpg',
-  price = 29,
-  compareAt = 39,
-  rating = 4.7,
-  badge = 'Best Seller',
-  onAdd = () => {},
+  rating = 4.8,
+  reviewCount = 128,
+  tag = 'Best Seller',
+  onQuickAdd,
 }: Partial<ProductCardProps>) {
   return (
-    <Card className="rounded-2xl border p-3">
-      <div className="relative mb-3 overflow-hidden rounded-xl">
-        <Image src={imageSrc} alt={name} width={600} height={600} className="h-56 w-full object-cover" unoptimized />
-        {badge ? <Badge className="absolute left-2 top-2 bg-[#E63946] text-white">{badge}</Badge> : null}
+    <Card className="group rounded-xl border border-slate-200 bg-white p-3 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md focus-within:ring-2 focus-within:ring-[#4f46e5]">
+      <div className="relative overflow-hidden rounded-lg">
+        <Image
+          src={imageSrc}
+          alt={name}
+          width={600}
+          height={400}
+          unoptimized
+          className="h-48 w-full object-cover transition-transform duration-300 group-hover:scale-105"
+        />
+        <Badge className="absolute left-2 top-2 bg-[#10b981] text-white">{tag}</Badge>
       </div>
-      <h3 className="line-clamp-1 font-semibold">{name}</h3>
-      <div className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
-        <Star className="h-4 w-4 fill-current text-amber-500" />
-        {rating.toFixed(1)}
+      <div className="pt-3">
+        <h3 className="line-clamp-1 font-semibold text-[#1A1A2E]">{name}</h3>
+        <div className="mt-1 flex items-center gap-1 text-sm text-slate-600">
+          <Star className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400" />
+          <span>{rating}</span>
+          <span>({reviewCount})</span>
+        </div>
+        <div className="mt-3 flex items-center justify-between">
+          <p className="text-lg font-bold text-[#1A1A2E]">{price}</p>
+          <Button size="sm" className="bg-[#4f46e5] hover:bg-[#4338ca]" onClick={onQuickAdd}>
+            <ShoppingBag className="mr-1 h-4 w-4" />
+            Quick Add
+          </Button>
+        </div>
       </div>
-      <div className="mt-2 flex items-baseline gap-2">
-        <p className="text-lg font-bold">${price}</p>
-        {compareAt > price ? <p className="text-sm text-muted-foreground line-through">${compareAt}</p> : null}
-      </div>
-      <Button onClick={onAdd} className="mt-3 w-full rounded-xl bg-[#E63946] hover:bg-[#c92f3b]">
-        Quick Add
-      </Button>
     </Card>
   )
 }

@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { AceternityInput } from '@/components/ui/aceternity-input';
 
 interface NewsletterSignupProps {
   headline: string;
@@ -10,8 +10,8 @@ interface NewsletterSignupProps {
 }
 
 export default function NewsletterSignup({
-  headline = 'Get Exclusive Offers in Your Inbox',
-  subheadline = 'Join our newsletter for weekly drops, early access, and members-only discounts.',
+  headline = 'Get 10% Off Your First Order',
+  subheadline = 'Join our newsletter for exclusive drops, seasonal deals, and style inspiration.',
   buttonLabel = 'Subscribe',
 }: Partial<NewsletterSignupProps>) {
   return (
@@ -20,7 +20,7 @@ export default function NewsletterSignup({
         <h2 className="text-2xl font-bold tracking-tight text-foreground md:text-3xl">{headline}</h2>
         {subheadline && <p className="mt-3 text-muted-foreground">{subheadline}</p>}
         <form className="mt-8 flex flex-col gap-3 sm:flex-row sm:gap-2">
-          <Input type="email" placeholder="Enter your email" className="flex-1" />
+          <AceternityInput type="email" placeholder="Enter your email" className="flex-1" />
           <Button type="submit" className="px-8">
             {buttonLabel}
           </Button>

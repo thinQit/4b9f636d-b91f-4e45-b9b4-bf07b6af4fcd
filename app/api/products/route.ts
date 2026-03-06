@@ -1,94 +1,73 @@
 import { Prisma } from "@prisma/client";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { productsQuerySchema } from "@/lib/validators";
 
-const categoryMap = {
-  workspace: "WORKSPACE",
-  travel: "TRAVEL",
-  wellness: "WELLNESS",
-  home: "HOME",
-} as const;
+const categoryMap: Record<string, "templates" | "ui_kits" | "starters" | "animations"> = {
+  templates: "templates",
+  "ui-kits": "ui_kits",
+  starters: "starters",
+  animations: "animations",
+};
 
-export async function GET(request: NextRequest) {
+export async function GET(req: Request) {
   try {
-    const queryObject = Object.fromEntries(request.nextUrl.searchParams.entries());
-    const parsed = productsQuerySchema.safeParse(queryObject);
+    const { searchParams } = new URL(req.url);
+    const parsed = productsQuerySchema.safeParse({
+      category: searchParams.get("category") ?? undefined,
+      sort: searchParams.get("sort") ?? undefined,
+      q: searchParams.get("q") ?? undefined,
+      featured: searchParams.get("featured") ?? undefined,
+    });
 
     if (!parsed.success) {
       return NextResponse.json(
-        { error: "Invalid query parameters", details: parsed.error.flatten() },
+        { error: "Invalid query parameters", issues: parsed.error.flatten() },
         { status: 400 }
       );
     }
 
-    const { search, category, collection, priceMin, priceMax, sort, page, limit } = parsed.data;
+    const { category, sort, q, featured } = parsed.data;
 
     const where: Prisma.ProductWhereInput = {
-      ...(search
+      isPublished: true,
+      ...(category ? { category: categoryMap[category] } : {}),
+      ...(typeof featured === "boolean" ? { isFeatured: featured } : {}),
+      ...(q
         ? {
             OR: [
-              { name: { contains: search, mode: "insensitive" } },
-              { description: { contains: search, mode: "insensitive" } },
-              { shortDescription: { contains: search, mode: "insensitive" } },
+              { name: { contains: q, mode: "insensitive" } },
+              { shortDescription: { contains: q, mode: "insensitive" } },
+              { highlights: { hasSome: [q] } },
             ],
-          }
-        : {}),
-      ...(category ? { category: categoryMap[category] } : {}),
-      ...(collection ? { collection: { equals: collection, mode: "insensitive" } } : {}),
-      ...(priceMin !== undefined || priceMax !== undefined
-        ? {
-            price: {
-              ...(priceMin !== undefined ? { gte: new Prisma.Decimal(priceMin) } : {}),
-              ...(priceMax !== undefined ? { lte: new Prisma.Decimal(priceMax) } : {}),
-            },
           }
         : {}),
     };
 
     const orderBy: Prisma.ProductOrderByWithRelationInput[] =
-      sort === "best"
-        ? [{ isBestSeller: "desc" as const }, { reviewCount: "desc" as const }]
-        : sort === "price_asc"
+      sort === "price_asc"
         ? [{ price: "asc" as const }]
         : sort === "price_desc"
         ? [{ price: "desc" as const }]
-        : sort === "newest"
-        ? [{ createdAt: "desc" as const }]
-        : [{ isFeatured: "desc" as const }, { createdAt: "desc" as const }];
+        : sort === "rating_desc"
+        ? [{ rating: "desc" as const }, { reviewCount: "desc" as const }]
+        : sort === "name_asc"
+        ? [{ name: "asc" as const }]
+        : [{ createdAt: "desc" as const }];
 
-    const skip = (page - 1) * limit;
-
-    const [total, products] = await Promise.all([
-      db.product.count({ where }),
-      db.product.findMany({
-        where,
-        orderBy,
-        skip,
-        take: limit,
-        include: {
-          images: {
-            orderBy: { position: "asc" as const },
-            take: 1,
-          },
-          highlights: {
-            orderBy: { position: "asc" as const },
-          },
-        },
-      }),
-    ]);
-
-    return NextResponse.json({
-      data: products,
-      pagination: {
-        page,
-        limit,
-        total,
-        totalPages: Math.ceil(total / limit),
-      },
+    const products = await db.product.findMany({
+      where,
+      orderBy,
     });
+
+    return NextResponse.json({ data: products }, { status: 200 });
   } catch (error) {
-    console.error("GET /api/products error:", error);
-    return NextResponse.json({ error: "Failed to fetch products" }, { status: 500 });
+    return NextResponse.json(
+      {
+        error: "Failed to fetch products.",
+        details: error instanceof Error ? error.message : "Unknown error",
+      },
+      { status: 500 }
+    );
   }
 }

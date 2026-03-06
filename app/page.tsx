@@ -1,77 +1,120 @@
 export const dynamic = 'force-dynamic';
 
-import AnnouncementBar from "@/components/AnnouncementBar"
 import HeroAurora from "@/components/HeroAurora"
-import CategoryCard from "@/components/CategoryCard"
-import ProductGrid from "@/components/ProductGrid"
-import TrustBadgesRow from "@/components/TrustBadgesRow"
-import TestimonialsCarousel from "@/components/TestimonialsCarousel"
+import FeaturesCards3D from "@/components/FeaturesCards3D"
 import GalleryMasonry from "@/components/GalleryMasonry"
+import TestimonialsAnimated from "@/components/TestimonialsAnimated"
+import CTASparkles from "@/components/CTASparkles"
 import NewsletterSignup from "@/components/NewsletterSignup"
-import SeoHead from "@/components/SeoHead"
-import JsonLd from "@/components/JsonLd"
 
 export default function HomePage() {
   return (
     <main>
-      <SeoHead />
-      <JsonLd />
-      <AnnouncementBar />
       <HeroAurora
-        badge="Spring Refresh Sale — up to 25% off best-sellers"
-        title="Everyday essentials, designed to look good and last longer."
-        subtitle="NovaCart curates minimalist gear for work, travel, and home—premium materials, fair pricing, and fast shipping."
-        primaryCta={{ label: "Shop New Arrivals", href: "/store?collection=new" }}
-        secondaryCta={{ label: "Explore Categories", href: "#categories" }}
+        badge='New: “Landing Page Kit v2” — 24 sections, Figma + Tailwind components.'
+        title="Designing fast, modern websites—and shipping digital products that sell."
+        subtitle="I’m Parv, a full-stack builder focused on clean UI, performance, and conversion. Explore my work, skills, and the digital store for templates, UI kits, and starter packs."
+        primaryCta={{ label: "View Projects", href: "/projects" }}
+        secondaryCta={{ label: "Browse Store", href: "/store" }}
       />
-      <section id="categories" className="py-20 md:py-28">
-        <div className="mx-auto max-w-7xl grid gap-4 md:gap-6 md:grid-cols-2 lg:grid-cols-4 px-4">
-          <CategoryCard />
-          <CategoryCard />
-          <CategoryCard />
-          <CategoryCard />
-        </div>
-      </section>
-      <section className="py-20 md:py-28 bg-muted/40">
-        <div className="mx-auto max-w-7xl px-4">
-          <ProductGrid />
-        </div>
-      </section>
-      <section className="py-20 md:py-28">
-        <div className="mx-auto max-w-7xl px-4">
-          <TrustBadgesRow />
-        </div>
-      </section>
-      <section className="py-20 md:py-28 bg-muted/40">
-        <div className="mx-auto max-w-7xl px-4">
-          <TestimonialsCarousel />
-        </div>
-      </section>
-      <section className="py-20 md:py-28">
-        <div className="mx-auto max-w-7xl px-4">
-          <GalleryMasonry
-            headline="See it in real life"
-            subheadline="A quick look at NovaCart essentials in everyday spaces—workspace, travel, and home."
-            images={[
-              { url: "/images/gallery/gallery-01.jpg", alt: "Wireless charger on a walnut desk" },
-              { url: "/images/gallery/gallery-02.jpg", alt: "Messenger bag on a commuter train seat" },
-              { url: "/images/gallery/gallery-03.jpg", alt: "Stainless bottle next to a gym towel" },
-              { url: "/images/gallery/gallery-04.jpg", alt: "Linen throw blanket on a modern sofa" },
-              { url: "/images/gallery/gallery-05.jpg", alt: "Minimal entryway tray with keys and wallet" },
-              { url: "/images/gallery/gallery-06.jpg", alt: "Packed travel pouch inside carry-on luggage" },
-            ]}
-          />
-        </div>
-      </section>
-      <section id="newsletter" className="py-20 md:py-28 bg-muted/40">
-        <div className="mx-auto max-w-7xl px-4">
-          <NewsletterSignup
-            headline="Get early access to drops and deals"
-            subheadline="Monthly emails only—new arrivals, limited runs, and members-only discounts. Unsubscribe anytime."
-            ctaLabel="Join the List"
-          />
-        </div>
-      </section>
+
+      <FeaturesCards3D
+        badge="Featured digital products"
+        title="High-quality assets to speed up your next build"
+        subtitle="Designed with Tailwind + shadcn/ui in mind."
+        features={[
+          {
+            icon: "Sparkles",
+            title: "Landing Page Kit v2 — $49",
+            description:
+              "24 responsive sections + CTA patterns optimized for conversion.",
+          },
+          {
+            icon: "Rocket",
+            title: "Portfolio Starter (Next.js) — $39",
+            description:
+              "App Router, metadata defaults, and reusable section components.",
+          },
+          {
+            icon: "MousePointerClick",
+            title: "UI Microinteractions Pack — $29",
+            description:
+              "Accessible hover, focus, and scroll animation recipes.",
+          },
+          {
+            icon: "FileText",
+            title: "Resume → Website Kit — $19",
+            description:
+              "Structured templates for about, skills, projects, and contact pages.",
+          },
+        ]}
+      />
+
+      <GalleryMasonry
+        headline="Selected projects"
+        subheadline="A mix of portfolio work and commerce-focused builds optimized for speed, clarity, and conversion."
+        images={[
+          {
+            url: "https://res.cloudinary.com/dwc294mzm/image/upload/c_fill,w_800,h_800,g_auto/v1/site-images/corporate/default.jpg",
+            alt: "Aurora Skin storefront redesign with clean product grid",
+            caption: "Aurora Skin — Storefront Redesign",
+          },
+          {
+            url: "https://res.cloudinary.com/dwc294mzm/image/upload/c_fill,w_1200,h_675,g_auto/v1/site-images/corporate/default.jpg",
+            alt: "FinWise marketing site with modern hero and pricing clarity",
+            caption: "FinWise — Marketing Site",
+          },
+          {
+            url: "https://res.cloudinary.com/dwc294mzm/image/upload/c_fill,w_1000,h_750,g_auto/v1/site-images/corporate/default.jpg",
+            alt: "Studio portfolio case study layout with metrics and gallery",
+            caption: "Studio Portfolio — Case Study System",
+          },
+        ]}
+      />
+
+      <TestimonialsAnimated
+        title="What clients say"
+        subtitle="Trust is built through clarity, speed, and follow-through."
+        autoplay
+        testimonials={[
+          {
+            quote:
+              "Parv delivered a storefront refresh that made our products feel premium without adding complexity.",
+            name: "Maya R.",
+            designation: "Founder, DTC Brand",
+            src: "https://res.cloudinary.com/dwc294mzm/image/upload/c_fill,w_1000,h_750,g_auto/v1/site-images/corporate/default.jpg",
+          },
+          {
+            quote:
+              "Strong design system thinking. The site shipped with consistent spacing and reusable sections.",
+            name: "Daniel K.",
+            designation: "Product Lead, SaaS",
+            src: "https://res.cloudinary.com/dwc294mzm/image/upload/c_fill,w_1000,h_750,g_auto/v1/site-images/corporate/default.jpg",
+          },
+          {
+            quote:
+              "Great attention to detail: micro-interactions, accessibility, and performance.",
+            name: "Aisha S.",
+            designation: "Creative Director",
+            src: "https://res.cloudinary.com/dwc294mzm/image/upload/c_fill,w_800,h_800,g_auto/v1/site-images/corporate/default.jpg",
+          },
+        ]}
+      />
+
+      <CTASparkles
+        title="Get monthly UI + conversion notes"
+        subtitle="Short, practical insights on building modern marketing sites and storefronts—no spam."
+        ctaLabel="Join the newsletter"
+        ctaHref="/contact#newsletter"
+        secondaryCtaLabel="Browse products"
+        secondaryCtaHref="/store"
+      />
+
+      <NewsletterSignup
+        headline="Product drops + practical build notes"
+        subheadline="Design patterns, Tailwind + shadcn tips, and SEO/performance checklists each month."
+        ctaLabel="Subscribe"
+      />
     </main>
   )
 }

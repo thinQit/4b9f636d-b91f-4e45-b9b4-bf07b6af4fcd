@@ -1,41 +1,32 @@
 import { z } from "zod";
 
+export const contactSchema = z.object({
+  name: z.string().min(2).max(100),
+  email: z.string().email().max(255),
+  company: z.string().max(120).optional().or(z.literal("")),
+  budget: z.enum(["$1k–$3k", "$3k–$7k", "$7k–$15k", "$15k+"]),
+  message: z.string().min(20).max(5000),
+  newsletter: z.boolean().optional().default(false),
+});
+
 export const productsQuerySchema = z.object({
-  search: z.string().trim().min(1).max(120).optional(),
-  category: z.enum(["workspace", "travel", "wellness", "home"]).optional(),
-  collection: z.string().trim().min(1).max(60).optional(),
-  priceMin: z.coerce.number().min(0).optional(),
-  priceMax: z.coerce.number().min(0).optional(),
-  sort: z.enum(["featured", "best", "price_asc", "price_desc", "newest"]).optional(),
-  page: z.coerce.number().int().min(1).default(1),
-  limit: z.coerce.number().int().min(1).max(50).default(12),
+  category: z.enum(["templates", "ui-kits", "starters", "animations"]).optional(),
+  sort: z.enum(["newest", "price_asc", "price_desc", "rating_desc", "name_asc"]).optional(),
+  q: z.string().min(1).max(100).optional(),
+  featured: z
+    .union([z.literal("true"), z.literal("false")])
+    .optional()
+    .transform((v) => (v ? v === "true" : undefined)),
 });
 
-export const slugParamsSchema = z.object({
-  slug: z.string().trim().min(1).max(120),
-});
-
-export const contactSubmissionSchema = z.object({
-  name: z.string().trim().min(2).max(120),
-  email: z.email().max(255),
-  topic: z.enum([
-    "order status",
-    "returns & exchanges",
-    "product question",
-    "bulk orders (10+)",
-    "recommendations",
-    "press & partnerships",
-    "pickup",
-    "tracking",
-    "return",
-    "other",
-  ]),
-  orderNumber: z.string().trim().max(60).optional().or(z.literal("")),
-  message: z.string().trim().min(10).max(5000),
-});
-
-export const newsletterSchema = z.object({
-  email: z.email().max(255),
-  consentGiven: z.boolean().default(true),
-  source: z.string().trim().max(100).optional(),
+export const testimonialsQuerySchema = z.object({
+  featured: z
+    .union([z.literal("true"), z.literal("false")])
+    .optional()
+    .transform((v) => (v ? v === "true" : undefined)),
+  limit: z
+    .string()
+    .regex(/^\d+$/)
+    .optional()
+    .transform((v) => (v ? Number.parseInt(v, 10) : undefined)),
 });

@@ -17,7 +17,7 @@ interface GalleryMasonryProps {
 
 export default function GalleryMasonry({
   headline = 'Shop the Look',
-  subheadline = 'Explore best-selling collections and trending products.',
+  subheadline = 'Explore product moments from our latest collection.',
   images = [],
 }: Partial<GalleryMasonryProps>) {
   const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null);
@@ -39,7 +39,14 @@ export default function GalleryMasonry({
                   setSelectedImage(img);
                 }}
               >
-                <Image src={img.url} alt={img.alt} width={800} height={800} unoptimized className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" />
+                <Image
+                  src={img.url}
+                  alt={img.alt}
+                  width={600}
+                  height={600}
+                  unoptimized
+                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                />
                 <div className="absolute inset-0 bg-black/0 transition-all group-hover:bg-black/30" />
                 {img.caption && (
                   <div className="absolute bottom-0 left-0 right-0 translate-y-full p-4 transition-transform group-hover:translate-y-0">
@@ -57,7 +64,14 @@ export default function GalleryMasonry({
               setSelectedImage(null);
             }}
           >
-            <Image src={selectedImage.url} alt={selectedImage.alt} width={1600} height={1000} unoptimized className="max-h-[85vh] max-w-[90vw] rounded-lg object-contain" />
+            <Image
+              src={selectedImage.url}
+              alt={selectedImage.alt}
+              width={1400}
+              height={1000}
+              unoptimized
+              className="max-h-[85vh] max-w-[90vw] rounded-lg object-contain"
+            />
           </div>
         )}
       </div>

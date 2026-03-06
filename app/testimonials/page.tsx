@@ -1,40 +1,62 @@
 export const dynamic = 'force-dynamic';
 
 import HeroAurora from "@/components/HeroAurora"
-import TestimonialsCarousel from "@/components/TestimonialsCarousel"
-import CTABanner from "@/components/CTABanner"
-import SeoHead from "@/components/SeoHead"
-import JsonLd from "@/components/JsonLd"
+import TestimonialsAnimated from "@/components/TestimonialsAnimated"
+import CTASparkles from "@/components/CTASparkles"
 
 export default function TestimonialsPage() {
   return (
     <main>
-      <SeoHead />
-      <JsonLd />
       <HeroAurora
-        badge="Average rating 4.8/5"
-        title="Reviews from real customers"
-        subtitle="What people say about NovaCart products, shipping, and support."
-        primaryCta={{ label: "Shop Best Sellers", href: "/store?sort=best" }}
-        secondaryCta={{ label: "Contact Support", href: "/contact" }}
+        title="Testimonials"
+        subtitle="Feedback from clients and collaborators—focused on outcomes, not hype."
+        primaryCta={{ label: "Start a project", href: "/contact" }}
+        secondaryCta={{ label: "View projects", href: "/projects" }}
       />
-      <section className="py-20 md:py-28">
-        <div className="mx-auto max-w-7xl px-4">
-          <TestimonialsCarousel />
-        </div>
-      </section>
-      <section className="py-20 md:py-28 bg-muted/40">
-        <div className="mx-auto max-w-7xl px-4">
-          <CTABanner
-            headline="Want a recommendation before you buy?"
-            description="Tell us what you’re shopping for and we’ll suggest a short list that fits your budget."
-            ctaLabel="Get Recommendations"
-            ctaHref="/contact?topic=recommendation"
-            secondaryCtaLabel="Shop Now"
-            secondaryCtaHref="/store"
-          />
-        </div>
-      </section>
+
+      <TestimonialsAnimated
+        title="Client feedback"
+        subtitle="Clear communication, consistent design, and fast delivery."
+        testimonials={[
+          {
+            quote:
+              "The site feels premium and trustworthy. Product pages are clearer, and the design system keeps everything consistent.",
+            name: "Maya R.",
+            designation: "Founder, DTC Brand",
+            src: "https://res.cloudinary.com/dwc294mzm/image/upload/c_fill,w_1000,h_750,g_auto/v1/site-images/corporate/default.jpg",
+          },
+          {
+            quote:
+              "Parv’s component library approach made future updates straightforward. We shipped fast and stayed on-brand.",
+            name: "Daniel K.",
+            designation: "Product Lead, SaaS",
+            src: "https://res.cloudinary.com/dwc294mzm/image/upload/c_fill,w_1000,h_750,g_auto/v1/site-images/corporate/default.jpg",
+          },
+          {
+            quote:
+              "Excellent polish—typography, spacing, and micro-interactions. The final build is modern and responsive.",
+            name: "Aisha S.",
+            designation: "Creative Director",
+            src: "https://res.cloudinary.com/dwc294mzm/image/upload/c_fill,w_800,h_800,g_auto/v1/site-images/corporate/default.jpg",
+          },
+          {
+            quote:
+              "Reliable delivery and strong technical decisions. SEO and performance were handled thoughtfully from the start.",
+            name: "Jon P.",
+            designation: "Agency Partner",
+            src: "https://res.cloudinary.com/dwc294mzm/image/upload/c_fill,w_1200,h_675,g_auto/v1/site-images/corporate/default.jpg",
+          },
+        ]}
+      />
+
+      <CTASparkles
+        title="Ready to ship a modern website?"
+        subtitle="Build a clean system that stays fresh with quarterly updates."
+        ctaLabel="Contact"
+        ctaHref="/contact"
+        secondaryCtaLabel="Browse store"
+        secondaryCtaHref="/store"
+      />
     </main>
   )
 }

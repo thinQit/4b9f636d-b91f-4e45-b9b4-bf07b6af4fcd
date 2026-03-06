@@ -16,10 +16,10 @@ interface FooterMultiColumnProps {
 }
 
 export default function FooterMultiColumn({
-  brand = 'ShopSphere',
-  description = 'Trusted e-commerce destination for everyday essentials, curated collections, and fast shipping.',
+  brand = 'ShopNova',
+  description = 'Your trusted destination for quality essentials, curated collections, and fast delivery.',
   columns = [],
-  copyright,
+  copyright = '',
 }: Partial<FooterMultiColumnProps>) {
   return (
     <footer className="bg-foreground text-background">
@@ -37,7 +37,10 @@ export default function FooterMultiColumn({
                   {col.links.map(function (link) {
                     return (
                       <li key={link.href}>
-                        <Link href={link.href} className="text-sm text-background/70 transition-colors hover:text-background">
+                        <Link
+                          href={link.href}
+                          className="text-sm text-background/70 transition-colors hover:text-background"
+                        >
                           {link.label}
                         </Link>
                       </li>

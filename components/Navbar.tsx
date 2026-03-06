@@ -1,54 +1,94 @@
 'use client'
 
 import Link from 'next/link'
-import { Menu, Search } from 'lucide-react'
-import { Input } from '@/components/ui/input'
+import { useState } from 'react'
+import { Menu, Search, ShoppingCart, X, Sparkles } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
-import CartButton from '@/components/CartButton'
 
 interface NavbarProps {
-  logoText?: string
-  categories?: string[]
-  cartCount?: number
-  onOpenMobileNav?: () => void
-  className?: string
+  logoText: string
+  navLinks: { label: string; href: string }[]
+  storeLinks: { label: string; href: string }[]
+  cartCount: number
+  onSearchClick?: () => void
 }
 
 export default function Navbar({
-  logoText = 'NexaShop',
-  categories = ['New Arrivals', 'Women', 'Men', 'Home', 'Sale'],
+  logoText = 'Parv Studio',
+  navLinks = [
+    { label: 'About Me', href: '#about' },
+    { label: 'Projects', href: '#projects' },
+    { label: 'Skills', href: '#skills' },
+    { label: 'Testimonials', href: '#testimonials' },
+    { label: 'Contact', href: '#contact' },
+  ],
+  storeLinks = [
+    { label: 'Store', href: '/store' },
+    { label: 'Featured', href: '/store?featured=true' },
+  ],
   cartCount = 0,
-  onOpenMobileNav,
-  className = '',
+  onSearchClick,
 }: Partial<NavbarProps>) {
-  return (
-    <header className={cn('sticky top-0 z-40 border-b bg-white/95 backdrop-blur', className)}>
-      <div className="mx-auto flex max-w-7xl items-center gap-3 px-4 py-3 md:px-6">
-        <Button variant="ghost" size="icon" className="md:hidden" onClick={onOpenMobileNav}>
-          <Menu className="h-5 w-5" />
-        </Button>
+  const [isMobileOpen, setIsMobileOpen] = useState(false)
 
-        <Link href="/" className="text-xl font-bold tracking-tight text-[#1A1A2E]">
-          {logoText}
+  return (
+    <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/90 backdrop-blur">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 md:px-6">
+        <Link href="/" className="flex items-center gap-2 font-semibold text-[#1A1A2E]">
+          <Sparkles className="h-5 w-5 text-[#4f46e5]" />
+          <span>{logoText}</span>
         </Link>
 
-        <nav className="ml-6 hidden items-center gap-5 md:flex">
-          {categories.map((cat) => (
-            <Link key={cat} href={'/collections/' + cat.toLowerCase().replace(/\s+/g, '-')} className="text-sm font-medium text-[#1A1A2E] hover:text-[#E63946]">
-              {cat}
+        <nav className="hidden items-center gap-6 md:flex">
+          {navLinks.map((link) => (
+            <Link key={link.href} href={link.href} className="text-sm font-medium text-slate-700 hover:text-[#4f46e5]">
+              {link.label}
             </Link>
           ))}
         </nav>
 
-        <div className="ml-auto hidden max-w-sm flex-1 items-center md:flex">
-          <div className="relative w-full">
-            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <Input placeholder="Search products..." className="pl-9" />
-          </div>
+        <div className="hidden items-center gap-3 md:flex">
+          {storeLinks.map((link) => (
+            <Link key={link.href} href={link.href} className="text-sm text-slate-600 hover:text-[#4f46e5]">
+              {link.label}
+            </Link>
+          ))}
+          <Button variant="outline" size="icon" onClick={onSearchClick}>
+            <Search className="h-4 w-4" />
+          </Button>
+          <Button variant="outline" size="icon" className="relative">
+            <ShoppingCart className="h-4 w-4" />
+            {cartCount > 0 && (
+              <span className="absolute -right-1 -top-1 rounded-full bg-[#E63946] px-1.5 text-[10px] text-white">
+                {cartCount}
+              </span>
+            )}
+          </Button>
         </div>
 
-        <CartButton count={cartCount} />
+        <Button variant="outline" size="icon" className="md:hidden" onClick={() => setIsMobileOpen(!isMobileOpen)}>
+          {isMobileOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+        </Button>
+      </div>
+
+      <div className={cn('border-t border-slate-200 bg-white md:hidden', isMobileOpen ? 'block' : 'hidden')}>
+        <div className="mx-auto max-w-7xl space-y-3 px-4 py-4">
+          <Input placeholder="Search products or projects..." onFocus={onSearchClick} />
+          <div className="grid gap-2">
+            {navLinks.concat(storeLinks).map((link) => (
+              <Link
+                key={link.href + link.label}
+                href={link.href}
+                className="rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-slate-100"
+                onClick={() => setIsMobileOpen(false)}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
+        </div>
       </div>
     </header>
   )

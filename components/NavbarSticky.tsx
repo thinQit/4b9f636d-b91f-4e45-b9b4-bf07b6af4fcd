@@ -17,15 +17,15 @@ interface NavbarStickyProps {
 }
 
 export default function NavbarSticky({
-  logo = 'ShopSphere',
+  logo = 'ShopNova',
   navItems = [],
-  ctaLabel = 'View Cart',
-  ctaHref = '/cart',
+  ctaLabel = 'Shop Now',
+  ctaHref = '#featured-products',
 }: Partial<NavbarStickyProps>) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/90 backdrop-blur-md">
+    <header className="sticky top-0 z-50 w-full border-b border-border bg-background/90 backdrop-blur-md">
       <div className="container mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
         <Link href="/" className="text-xl font-bold text-foreground">
           {logo}
@@ -65,7 +65,7 @@ export default function NavbarSticky({
         </button>
       </div>
       {mobileOpen && (
-        <div className="border-t bg-background md:hidden">
+        <div className="border-t border-border bg-background md:hidden">
           <nav className="container mx-auto flex flex-col gap-4 px-4 py-4">
             {navItems.map(function (item) {
               return (

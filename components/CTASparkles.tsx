@@ -1,26 +1,33 @@
-'use client';
-import { SparklesCore } from '@/components/ui/backgrounds/sparkles';
-import { Button } from '@/components/ui/button';
+"use client";
+import { SparklesCore } from "@/components/ui/backgrounds/sparkles";
+import { Button } from "@/components/ui/button";
 
 interface CTASparklesProps {
-  headline: string;
+  title?: string;
+  headline?: string;
+  subtitle?: string;
   description?: string;
-  ctaLabel: string;
-  ctaHref: string;
+  ctaLabel?: string;
+  ctaHref?: string;
   secondaryCtaLabel?: string;
   secondaryCtaHref?: string;
   sparkleColor?: string;
 }
 
 export default function CTASparkles({
-  headline = 'Flash Sale Ends Tonight',
-  description = 'Grab your favorites before midnight and enjoy exclusive checkout discounts.',
-  ctaLabel = 'Claim Deals',
-  ctaHref = '/sale',
-  secondaryCtaLabel = 'View Best Sellers',
-  secondaryCtaHref = '/best-sellers',
-  sparkleColor = '#67e8f9',
+  title,
+  headline,
+  subtitle,
+  description,
+  ctaLabel = 'Start Shopping',
+  ctaHref = '#featured-products',
+  secondaryCtaLabel = 'View Deals',
+  secondaryCtaHref = '#categories',
+  sparkleColor = "#4f46e5",
 }: Partial<CTASparklesProps>) {
+  // Prefer `title` then `headline` for heading; prefer `subtitle` then `description` for sub.
+  const resolvedTitle = title ?? headline ?? "Ready to Upgrade Your Cart?";
+  const resolvedSub = subtitle ?? description ?? "Unlock exclusive bundles, limited-time savings, and member-only perks today.";
   return (
     <section className="relative flex h-[30rem] w-full flex-col items-center justify-center overflow-hidden rounded-md bg-black">
       <div className="absolute inset-0 h-full w-full">
@@ -34,12 +41,14 @@ export default function CTASparkles({
         />
       </div>
       <div className="relative z-10 px-4 text-center">
-        <h2 className="text-center text-3xl font-bold text-white md:text-5xl lg:text-6xl">{headline}</h2>
-        {description && <p className="mx-auto mt-4 max-w-xl text-sm text-white/60 md:text-lg">{description}</p>}
+        <h2 className="text-center text-3xl font-bold text-white md:text-5xl lg:text-6xl">{resolvedTitle}</h2>
+        {resolvedSub && <p className="mx-auto mt-4 max-w-xl text-sm text-white/60 md:text-lg">{resolvedSub}</p>}
         <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-          <Button size="lg" className="bg-white px-8 py-6 text-lg text-black hover:bg-white/90" asChild>
-            <a href={ctaHref}>{ctaLabel}</a>
-          </Button>
+          {ctaLabel && ctaHref && (
+            <Button size="lg" className="bg-white px-8 py-6 text-lg text-black hover:bg-white/90" asChild>
+              <a href={ctaHref}>{ctaLabel}</a>
+            </Button>
+          )}
           {secondaryCtaLabel && secondaryCtaHref && (
             <Button variant="outline" size="lg" className="border-white/30 px-8 py-6 text-lg text-white hover:bg-white/10" asChild>
               <a href={secondaryCtaHref}>{secondaryCtaLabel}</a>

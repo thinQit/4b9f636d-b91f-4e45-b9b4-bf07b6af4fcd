@@ -1,60 +1,56 @@
 export const dynamic = 'force-dynamic';
 
 import HeroAurora from "@/components/HeroAurora"
-import FAQAccordion from "@/components/FAQAccordion"
+import FeaturesCards3D from "@/components/FeaturesCards3D"
 import CTASparkles from "@/components/CTASparkles"
-import SeoHead from "@/components/SeoHead"
-import JsonLd from "@/components/JsonLd"
 
-export default function SeoPage() {
+export default function SEOPage() {
   return (
     <main>
-      <SeoHead />
-      <JsonLd />
       <HeroAurora
-        badge="Managed every 3 months"
-        title="SEO metadata management"
-        subtitle="Centralized titles, descriptions, Open Graph images, and JSON-LD for products—built into the codebase for consistent updates every quarter."
-        primaryCta={{ label: "View SEO Rules", href: "#seo-rules" }}
-        secondaryCta={{ label: "Go to Store", href: "/store" }}
+        title="SEO metadata system"
+        subtitle="A structured approach to titles, descriptions, OpenGraph, and JSON-LD across portfolio and store pages."
+        primaryCta={{ label: "View projects", href: "/projects" }}
+        secondaryCta={{ label: "Browse store", href: "/store" }}
       />
-      <section id="structured-data" className="py-20 md:py-28">
-        <div className="mx-auto max-w-7xl px-4">
-          <FAQAccordion
-            headline="Structured data FAQ"
-            subheadline="How product rich results are supported."
-            items={[
-              {
-                question: "Do product pages include price and availability in schema?",
-                answer:
-                  "Yes. Product JSON-LD includes Offer fields like price, currency, and availability (e.g., InStock/OutOfStock).",
-              },
-              {
-                question: "Are cart and checkout indexed?",
-                answer:
-                  "No. Cart and checkout should be set to noindex to avoid thin/duplicate content in search.",
-              },
-              {
-                question: "How are Open Graph images handled?",
-                answer:
-                  "Default OG images are set site-wide, with product-specific OG images generated from the primary product image when available.",
-              },
-            ]}
-          />
-        </div>
-      </section>
-      <section className="py-20 md:py-28 bg-muted/40">
-        <div className="mx-auto max-w-7xl px-4">
-          <CTASparkles
-            title="Want us to handle quarterly SEO updates?"
-            subtitle="We’ll refresh metadata, review Search Console signals, and adjust category copy to match seasonal demand."
-            ctaLabel="Request SEO Update"
-            ctaHref="/contact?topic=press"
-            secondaryCtaLabel="Back to Home"
-            secondaryCtaHref="/"
-          />
-        </div>
-      </section>
+
+      <FeaturesCards3D
+        badge="Metadata rules (site-wide)"
+        title="Consistent defaults with page-level overrides"
+        features={[
+          {
+            icon: "Heading1",
+            title: "Title format",
+            description: "Default: {Page} | Parv — Portfolio + Storefront.",
+          },
+          {
+            icon: "FileSearch",
+            title: "Description strategy",
+            description:
+              "Concise value proposition plus primary keyword focus per page intent.",
+          },
+          {
+            icon: "Image",
+            title: "OpenGraph",
+            description:
+              "1200×630 social previews using brand gradient and clear page context.",
+          },
+          {
+            icon: "Braces",
+            title: "JSON-LD",
+            description: "Person, WebSite, and Product schema for better discoverability.",
+          },
+        ]}
+      />
+
+      <CTASparkles
+        title="Want SEO baked into your build?"
+        subtitle="Metadata, OpenGraph, and structured data ship as standard workflow."
+        ctaLabel="Contact"
+        ctaHref="/contact"
+        secondaryCtaLabel="About"
+        secondaryCtaHref="/about"
+      />
     </main>
   )
 }
