@@ -1,95 +1,109 @@
 'use client'
 
-import Link from 'next/link'
 import { useState } from 'react'
-import { Menu, Search, ShoppingCart, X, Sparkles } from 'lucide-react'
+import Link from 'next/link'
+import { Menu, Search, ShoppingCart, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
 
+interface NavLink {
+  label: string
+  href: string
+}
+
 interface NavbarProps {
-  logoText: string
-  navLinks: { label: string; href: string }[]
-  storeLinks: { label: string; href: string }[]
-  cartCount: number
-  onSearchClick?: () => void
+  logoText?: string
+  links?: NavLink[]
+  cartCount?: number
+  className?: string
 }
 
 export default function Navbar({
-  logoText = 'Parv Studio',
-  navLinks = [
-    { label: 'About Me', href: '#about' },
-    { label: 'Projects', href: '#projects' },
-    { label: 'Skills', href: '#skills' },
-    { label: 'Testimonials', href: '#testimonials' },
-    { label: 'Contact', href: '#contact' },
+  logoText = 'Northlane Shop',
+  links = [
+    { label: 'New Arrivals', href: '/collections/new' },
+    { label: 'Men', href: '/collections/men' },
+    { label: 'Women', href: '/collections/women' },
+    { label: 'Accessories', href: '/collections/accessories' },
+    { label: 'Sale', href: '/collections/sale' },
   ],
-  storeLinks = [
-    { label: 'Store', href: '/store' },
-    { label: 'Featured', href: '/store?featured=true' },
-  ],
-  cartCount = 0,
-  onSearchClick,
+  cartCount = 2,
+  className = '',
 }: Partial<NavbarProps>) {
-  const [isMobileOpen, setIsMobileOpen] = useState(false)
+  const [open, setOpen] = useState(false)
 
   return (
-    <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/90 backdrop-blur">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 md:px-6">
-        <Link href="/" className="flex items-center gap-2 font-semibold text-[#1A1A2E]">
-          <Sparkles className="h-5 w-5 text-[#4f46e5]" />
-          <span>{logoText}</span>
+    <header className={cn('sticky top-0 z-50 border-b bg-white/95 backdrop-blur', className)}>
+      <div className="mx-auto flex max-w-7xl items-center gap-3 px-4 py-3 md:gap-6">
+        <Link href="/" className="shrink-0 text-lg font-bold tracking-tight text-[#1A1A2E]">
+          {logoText}
         </Link>
 
-        <nav className="hidden items-center gap-6 md:flex">
-          {navLinks.map((link) => (
-            <Link key={link.href} href={link.href} className="text-sm font-medium text-slate-700 hover:text-[#4f46e5]">
+        <nav className="hidden items-center gap-5 md:flex">
+          {links.map((link) => (
+            <Link key={link.href} href={link.href} className="text-sm font-medium text-[#1A1A2E] hover:text-[#E63946]">
               {link.label}
             </Link>
           ))}
         </nav>
 
-        <div className="hidden items-center gap-3 md:flex">
-          {storeLinks.map((link) => (
-            <Link key={link.href} href={link.href} className="text-sm text-slate-600 hover:text-[#4f46e5]">
-              {link.label}
-            </Link>
-          ))}
-          <Button variant="outline" size="icon" onClick={onSearchClick}>
-            <Search className="h-4 w-4" />
-          </Button>
-          <Button variant="outline" size="icon" className="relative">
-            <ShoppingCart className="h-4 w-4" />
-            {cartCount > 0 && (
-              <span className="absolute -right-1 -top-1 rounded-full bg-[#E63946] px-1.5 text-[10px] text-white">
-                {cartCount}
-              </span>
-            )}
-          </Button>
+        <div className="ml-auto hidden w-full max-w-sm md:block">
+          <div className="relative">
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Input placeholder="Search products..." className="pl-9" />
+          </div>
         </div>
 
-        <Button variant="outline" size="icon" className="md:hidden" onClick={() => setIsMobileOpen(!isMobileOpen)}>
-          {isMobileOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+        <Button variant="outline" className="relative hidden md:inline-flex">
+          <ShoppingCart className="mr-2 h-4 w-4" />
+          Cart
+          <span className="ml-2 rounded-full bg-[#E63946] px-2 py-0.5 text-xs text-white">{cartCount}</span>
+        </Button>
+
+        <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setOpen(true)}>
+          <Menu className="h-5 w-5" />
         </Button>
       </div>
 
-      <div className={cn('border-t border-slate-200 bg-white md:hidden', isMobileOpen ? 'block' : 'hidden')}>
-        <div className="mx-auto max-w-7xl space-y-3 px-4 py-4">
-          <Input placeholder="Search products or projects..." onFocus={onSearchClick} />
-          <div className="grid gap-2">
-            {navLinks.concat(storeLinks).map((link) => (
-              <Link
-                key={link.href + link.label}
-                href={link.href}
-                className="rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-slate-100"
-                onClick={() => setIsMobileOpen(false)}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </div>
+      {open && (
+        <div className="fixed inset-0 z-[60] md:hidden">
+          <button className="absolute inset-0 bg-black/40" onClick={() => setOpen(false)} aria-label="Close menu" />
+          <aside className="absolute right-0 top-0 h-full w-[85%] max-w-sm bg-white p-5 shadow-xl">
+            <div className="mb-6 flex items-center justify-between">
+              <span className="font-semibold text-[#1A1A2E]">Menu</span>
+              <Button variant="ghost" size="icon" onClick={() => setOpen(false)}>
+                <X className="h-5 w-5" />
+              </Button>
+            </div>
+
+            <div className="mb-5">
+              <div className="relative">
+                <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Input placeholder="Search products..." className="pl-9" />
+              </div>
+            </div>
+
+            <nav className="flex flex-col gap-1">
+              {links.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setOpen(false)}
+                  className="rounded-md px-3 py-2 text-sm font-medium text-[#1A1A2E] hover:bg-muted"
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
+
+            <Button className="mt-6 w-full bg-[#E63946] hover:bg-[#d83240]">
+              <ShoppingCart className="mr-2 h-4 w-4" />
+              View Cart ({cartCount})
+            </Button>
+          </aside>
         </div>
-      </div>
+      )}
     </header>
   )
 }

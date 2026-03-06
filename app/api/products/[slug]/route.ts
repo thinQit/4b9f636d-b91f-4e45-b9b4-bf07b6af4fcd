@@ -1,58 +1,68 @@
-import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/lib/db";
-import { slugParamsSchema } from "@/lib/validators";
+import { NextResponse } from "next/server";
+import { products } from "@/lib/products";
+import { productSlugParamsSchema } from "@/lib/validators";
 
-export async function GET(_request: NextRequest, context: { params: Promise<{ slug: string }> }) {
+type RouteContext = {
+  params: Promise<{ slug: string }>;
+};
+
+export async function GET(_request: Request, context: RouteContext) {
   try {
     const params = await context.params;
-    const parsedParams = slugParamsSchema.safeParse(params);
+    const parsed = productSlugParamsSchema.safeParse(params);
 
-    if (!parsedParams.success) {
+    if (!parsed.success) {
       return NextResponse.json(
-        { error: "Invalid slug", details: parsedParams.error.flatten() },
+        {
+          success: false,
+          error: "Invalid product slug",
+          details: parsed.error.flatten(),
+        },
         { status: 400 }
       );
     }
 
-    const { slug } = parsedParams.data;
-
-    const product = await db.product.findUnique({
-      where: { slug },
-      include: {
-        images: {
-          orderBy: { position: "asc" as const },
-        },
-        variants: true,
-        highlights: {
-          orderBy: { position: "asc" as const },
-        },
-        relatedFrom: {
-          include: {
-            relatedProduct: {
-              include: {
-                images: {
-                  orderBy: { position: "asc" as const },
-                  take: 1,
-                },
-              },
-            },
-          },
-        },
-      },
-    });
+    const { slug } = parsed.data;
+    const product = products.find((item) => item.slug === slug);
 
     if (!product) {
-      return NextResponse.json({ error: "Product not found" }, { status: 404 });
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Product not found",
+        },
+        { status: 404 }
+      );
     }
 
-    return NextResponse.json({
-      data: {
-        ...product,
-        relatedProducts: product.relatedFrom.map((rp) => rp.relatedProduct),
+    const relatedProducts = products
+      .filter((item) => product.relatedSlugs.includes(item.slug))
+      .map((item) => ({
+        sku: item.sku,
+        slug: item.slug,
+        name: item.name,
+        price: item.price,
+        image: item.image,
+      }));
+
+    return NextResponse.json(
+      {
+        success: true,
+        data: {
+          ...product,
+          relatedProducts,
+        },
       },
-    });
+      { status: 200 }
+    );
   } catch (error) {
     console.error("GET /api/products/[slug] error:", error);
-    return NextResponse.json({ error: "Failed to fetch product" }, { status: 500 });
+    return NextResponse.json(
+      {
+        success: false,
+        error: "Internal server error",
+      },
+      { status: 500 }
+    );
   }
 }

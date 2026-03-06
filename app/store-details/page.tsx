@@ -1,70 +1,53 @@
 export const dynamic = 'force-dynamic';
 
-import HeroAurora from "@/components/HeroAurora"
+import HeroGradient from "@/components/HeroGradient"
 import FAQAccordion from "@/components/FAQAccordion"
 import MapEmbed from "@/components/MapEmbed"
 import CTABanner from "@/components/CTABanner"
-import SeoHead from "@/components/SeoHead"
-import JsonLd from "@/components/JsonLd"
 
 export default function StoreDetailsPage() {
   return (
-    <main>
-      <SeoHead />
-      <JsonLd />
-      <HeroAurora
-        badge="Support: Mon–Fri, 9am–5pm CT"
-        title="Store details, shipping, and returns"
-        subtitle="Everything you need to know—policies, support, and where to find us."
-        primaryCta={{ label: "Contact Support", href: "/contact" }}
-        secondaryCta={{ label: "Shop Now", href: "/store" }}
+    <div>
+      <HeroGradient
+        headline="Store details, shipping, and policies"
+        subheadline="Everything you need before you buy—shipping times, returns, warranty, and how to reach us."
+        primaryCta={{ label: "Shop now", href: "/store" }}
+        secondaryCta={{ label: "Contact support", href: "/contact" }}
       />
-      <section id="shipping-returns" className="py-20 md:py-28">
-        <div className="mx-auto max-w-7xl px-4">
-          <FAQAccordion
-            headline="Shipping & returns"
-            subheadline="Clear policies that reduce uncertainty and increase confidence at checkout."
-            items={[
-              {
-                question: "Shipping times",
-                answer:
-                  "Orders ship within 24–48 hours. Standard delivery is 2–5 business days; Express is 1–2 business days (US).",
-              },
-              {
-                question: "Free shipping threshold",
-                answer: "Free standard shipping on US orders over $60 (after discounts, before taxes).",
-              },
-              {
-                question: "Returns",
-                answer:
-                  "Return unused items within 30 days of delivery. Refunds are issued to the original payment method after inspection.",
-              },
-              {
-                question: "Exchanges",
-                answer:
-                  "We can exchange for a different color/variant if stock is available. Contact support with your order number.",
-              },
-            ]}
-          />
-        </div>
-      </section>
-      <section id="visit" className="py-20 md:py-28 bg-muted/40">
-        <div className="mx-auto max-w-7xl px-4">
-          <MapEmbed />
-        </div>
-      </section>
-      <section className="py-20 md:py-28">
-        <div className="mx-auto max-w-7xl px-4">
-          <CTABanner
-            headline="Questions before you buy?"
-            description="We’ll help you pick the right items and confirm sizing, materials, and delivery timelines."
-            ctaLabel="Message Support"
-            ctaHref="/contact"
-            secondaryCtaLabel="Shop the Store"
-            secondaryCtaHref="/store"
-          />
-        </div>
-      </section>
-    </main>
+      <FAQAccordion
+        headline="FAQ"
+        subheadline="Quick answers to common questions."
+        items={[
+          {
+            question: "Do you ship internationally?",
+            answer:
+              "Yes—Canada is available by default. For other regions, contact support and we’ll confirm rates and timelines.",
+          },
+          {
+            question: "Are your chargers compatible with iPhone and Android?",
+            answer:
+              "Our MagSafe-compatible stand works best with MagSafe iPhones and compatible magnetic cases. USB‑C accessories work across most modern devices.",
+          },
+          {
+            question: "How do I get a discount code?",
+            answer: "Join the newsletter for a one-time 10% welcome code and early access to seasonal drops.",
+          },
+          {
+            question: "Can I change my order after placing it?",
+            answer:
+              "If you contact us within 1 hour of purchase (during business hours), we can usually update the address or cancel the order.",
+          },
+        ]}
+      />
+      <MapEmbed />
+      <CTABanner
+        headline="Still have questions?"
+        description="Reach out and we’ll reply within 1 business day."
+        ctaLabel="Contact support"
+        ctaHref="/contact"
+        secondaryCtaLabel="Start shopping"
+        secondaryCtaHref="/store"
+      />
+    </div>
   )
 }

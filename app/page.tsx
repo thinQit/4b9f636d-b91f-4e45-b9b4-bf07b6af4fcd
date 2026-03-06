@@ -1,120 +1,78 @@
 export const dynamic = 'force-dynamic';
 
-import HeroAurora from "@/components/HeroAurora"
-import FeaturesCards3D from "@/components/FeaturesCards3D"
+import AnnouncementBar from "@/components/AnnouncementBar"
+import HeroGradient from "@/components/HeroGradient"
+import CategoryCards from "@/components/CategoryCards"
+import ProductGrid from "@/components/ProductGrid"
+import TrustBadges from "@/components/TrustBadges"
 import GalleryMasonry from "@/components/GalleryMasonry"
-import TestimonialsAnimated from "@/components/TestimonialsAnimated"
-import CTASparkles from "@/components/CTASparkles"
+import TestimonialsGrid from "@/components/TestimonialsGrid"
 import NewsletterSignup from "@/components/NewsletterSignup"
+import CTABanner from "@/components/CTABanner"
 
 export default function HomePage() {
   return (
-    <main>
-      <HeroAurora
-        badge='New: “Landing Page Kit v2” — 24 sections, Figma + Tailwind components.'
-        title="Designing fast, modern websites—and shipping digital products that sell."
-        subtitle="I’m Parv, a full-stack builder focused on clean UI, performance, and conversion. Explore my work, skills, and the digital store for templates, UI kits, and starter packs."
-        primaryCta={{ label: "View Projects", href: "/projects" }}
-        secondaryCta={{ label: "Browse Store", href: "/store" }}
+    <div>
+      <AnnouncementBar />
+      <HeroGradient
+        badge="Spring Drop: 15% off orders over $75 with code SPRING15 (ends Sunday 11:59pm)."
+        headline="Shop modern essentials that ship fast—and look even better in real life."
+        subheadline="NeonCart is a curated store for desk, travel, and everyday carry. New drops every season, transparent pricing, and a 30‑day returns promise."
+        primaryCta={{ label: "Shop best sellers", href: "/store" }}
+        secondaryCta={{ label: "View store details", href: "/store-details" }}
       />
-
-      <FeaturesCards3D
-        badge="Featured digital products"
-        title="High-quality assets to speed up your next build"
-        subtitle="Designed with Tailwind + shadcn/ui in mind."
-        features={[
-          {
-            icon: "Sparkles",
-            title: "Landing Page Kit v2 — $49",
-            description:
-              "24 responsive sections + CTA patterns optimized for conversion.",
-          },
-          {
-            icon: "Rocket",
-            title: "Portfolio Starter (Next.js) — $39",
-            description:
-              "App Router, metadata defaults, and reusable section components.",
-          },
-          {
-            icon: "MousePointerClick",
-            title: "UI Microinteractions Pack — $29",
-            description:
-              "Accessible hover, focus, and scroll animation recipes.",
-          },
-          {
-            icon: "FileText",
-            title: "Resume → Website Kit — $19",
-            description:
-              "Structured templates for about, skills, projects, and contact pages.",
-          },
-        ]}
-      />
-
+      <CategoryCards />
+      <ProductGrid />
+      <TrustBadges />
       <GalleryMasonry
-        headline="Selected projects"
-        subheadline="A mix of portfolio work and commerce-focused builds optimized for speed, clarity, and conversion."
+        headline="See it in real spaces"
+        subheadline="Customer setups and product close-ups—clean, minimal, and practical."
         images={[
-          {
-            url: "https://res.cloudinary.com/dwc294mzm/image/upload/c_fill,w_800,h_800,g_auto/v1/site-images/corporate/default.jpg",
-            alt: "Aurora Skin storefront redesign with clean product grid",
-            caption: "Aurora Skin — Storefront Redesign",
-          },
-          {
-            url: "https://res.cloudinary.com/dwc294mzm/image/upload/c_fill,w_1200,h_675,g_auto/v1/site-images/corporate/default.jpg",
-            alt: "FinWise marketing site with modern hero and pricing clarity",
-            caption: "FinWise — Marketing Site",
-          },
-          {
-            url: "https://res.cloudinary.com/dwc294mzm/image/upload/c_fill,w_1000,h_750,g_auto/v1/site-images/corporate/default.jpg",
-            alt: "Studio portfolio case study layout with metrics and gallery",
-            caption: "Studio Portfolio — Case Study System",
-          },
+          { url: "https://res.cloudinary.com/dwc294mzm/image/upload/c_fill,w_800,h_800,g_auto/v1/site-images/corporate/default.jpg", alt: "Desk tray with keys and wallet on a white desk" },
+          { url: "https://res.cloudinary.com/dwc294mzm/image/upload/c_fill,w_1000,h_750,g_auto/v1/site-images/corporate/default.jpg", alt: "MagSafe stand charger next to a laptop and notebook" },
+          { url: "https://res.cloudinary.com/dwc294mzm/image/upload/c_fill,w_1000,h_750,g_auto/v1/site-images/corporate/default.jpg", alt: "Travel pouch packed with cables and adapters" },
         ]}
       />
-
-      <TestimonialsAnimated
-        title="What clients say"
-        subtitle="Trust is built through clarity, speed, and follow-through."
-        autoplay
+      <TestimonialsGrid
+        headline="Loved by customers who prefer clean design"
+        subheadline="Real feedback from people using NeonCart gear every day."
         testimonials={[
           {
             quote:
-              "Parv delivered a storefront refresh that made our products feel premium without adding complexity.",
+              "The desk tray set instantly made my workspace feel calmer. The finish is premium and it doesn’t slide around.",
             name: "Maya R.",
-            designation: "Founder, DTC Brand",
-            src: "https://res.cloudinary.com/dwc294mzm/image/upload/c_fill,w_1000,h_750,g_auto/v1/site-images/corporate/default.jpg",
+            title: "Seattle, WA",
+            rating: 5,
           },
           {
             quote:
-              "Strong design system thinking. The site shipped with consistent spacing and reusable sections.",
-            name: "Daniel K.",
-            designation: "Product Lead, SaaS",
-            src: "https://res.cloudinary.com/dwc294mzm/image/upload/c_fill,w_1000,h_750,g_auto/v1/site-images/corporate/default.jpg",
+              "Fast shipping and the MagSafe stand is rock solid. It’s the first charger that doesn’t wobble on my desk.",
+            name: "Jordan K.",
+            title: "Brooklyn, NY",
+            rating: 5,
           },
           {
             quote:
-              "Great attention to detail: micro-interactions, accessibility, and performance.",
-            name: "Aisha S.",
-            designation: "Creative Director",
-            src: "https://res.cloudinary.com/dwc294mzm/image/upload/c_fill,w_800,h_800,g_auto/v1/site-images/corporate/default.jpg",
+              "The travel pouch is perfect for cables and adapters. I wish I bought two—one for work and one for trips.",
+            name: "Priya S.",
+            title: "Austin, TX",
+            rating: 4,
           },
         ]}
       />
-
-      <CTASparkles
-        title="Get monthly UI + conversion notes"
-        subtitle="Short, practical insights on building modern marketing sites and storefronts—no spam."
-        ctaLabel="Join the newsletter"
-        ctaHref="/contact#newsletter"
-        secondaryCtaLabel="Browse products"
-        secondaryCtaHref="/store"
-      />
-
       <NewsletterSignup
-        headline="Product drops + practical build notes"
-        subheadline="Design patterns, Tailwind + shadcn tips, and SEO/performance checklists each month."
-        ctaLabel="Subscribe"
+        headline="Get early access to new drops"
+        subheadline="Monthly emails only—product launches, restocks, and occasional subscriber-only discounts."
+        ctaLabel="Join the list"
       />
-    </main>
+      <CTABanner
+        headline="Ready to upgrade your everyday carry?"
+        description="Shop curated essentials with fast shipping, easy returns, and a clean aesthetic that fits anywhere."
+        ctaLabel="Start shopping"
+        ctaHref="/store"
+        secondaryCtaLabel="Ask a question"
+        secondaryCtaHref="/contact"
+      />
+    </div>
   )
 }

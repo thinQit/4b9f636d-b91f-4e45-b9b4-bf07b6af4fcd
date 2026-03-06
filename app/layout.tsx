@@ -1,69 +1,59 @@
 import "./globals.css"
-import { Inter } from "next/font/google"
+import { Inter, DM_Sans } from "next/font/google"
 import NavbarSticky from "@/components/NavbarSticky"
 import FooterMultiColumn from "@/components/FooterMultiColumn"
 
-const inter = Inter({ subsets: ["latin"] })
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" })
+const dmSans = DM_Sans({ subsets: ["latin"], variable: "--font-dm-sans" })
 
-export const metadata = {
-  title: "Parv — Portfolio + Storefront",
-  description:
-    "Modern portfolio and digital product storefront. Explore projects, skills, testimonials, and download-ready templates built for Tailwind + shadcn.",
-}
-
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`${inter.variable} ${dmSans.variable} bg-background text-foreground antialiased`}>
         <NavbarSticky
-          logo="Parv"
+          logo="NeonCart"
           navItems={[
             { label: "Home", href: "/" },
-            { label: "About Me", href: "/about" },
-            { label: "Projects", href: "/projects" },
-            { label: "Skills", href: "/skills" },
+            { label: "Shop", href: "/store" },
+            { label: "Store Details", href: "/store-details" },
             { label: "Testimonials", href: "/testimonials" },
-            { label: "Store", href: "/store" },
+            { label: "About", href: "/about" },
             { label: "Contact", href: "/contact" },
           ]}
-          ctaLabel="Browse Store"
+          ctaLabel="Shop now"
           ctaHref="/store"
         />
-        {children}
+        <main>{children}</main>
         <FooterMultiColumn
-          brand="Parv — Portfolio + Storefront"
-          description="A modern portfolio with a conversion-focused storefront for digital products."
+          brand="NeonCart"
+          description="Curated essentials for modern life."
           columns={[
             {
-              title: "Pages",
+              title: "Shop",
+              links: [
+                { label: "All products", href: "/store" },
+                { label: "Best sellers", href: "/store?sort=best-sellers" },
+                { label: "New arrivals", href: "/store?sort=new" },
+              ],
+            },
+            {
+              title: "Company",
               links: [
                 { label: "About", href: "/about" },
-                { label: "Projects", href: "/projects" },
-                { label: "Skills", href: "/skills" },
                 { label: "Testimonials", href: "/testimonials" },
                 { label: "Contact", href: "/contact" },
               ],
             },
             {
-              title: "Store",
+              title: "Help",
               links: [
-                { label: "All products", href: "/store" },
-                { label: "Store details", href: "/store/details" },
-              ],
-            },
-            {
-              title: "Social",
-              links: [
-                { label: "GitHub", href: "https://github.com/" },
-                { label: "LinkedIn", href: "https://www.linkedin.com/" },
+                { label: "Shipping & returns", href: "/store-details#shipping" },
+                { label: "FAQ", href: "/store-details#faq" },
+                { label: "Privacy", href: "/store-details#privacy" },
               ],
             },
           ]}
-          copyright="© 2026 Parv. All rights reserved."
+          copyright="© 2026 NeonCart Commerce. All rights reserved."
         />
       </body>
     </html>

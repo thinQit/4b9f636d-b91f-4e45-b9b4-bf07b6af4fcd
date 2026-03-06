@@ -1,62 +1,65 @@
 export const dynamic = 'force-dynamic';
 
-import HeroAurora from "@/components/HeroAurora"
-import TestimonialsAnimated from "@/components/TestimonialsAnimated"
-import CTASparkles from "@/components/CTASparkles"
+import HeroGradient from "@/components/HeroGradient"
+import TestimonialsGrid from "@/components/TestimonialsGrid"
+import CTABanner from "@/components/CTABanner"
 
 export default function TestimonialsPage() {
   return (
-    <main>
-      <HeroAurora
-        title="Testimonials"
-        subtitle="Feedback from clients and collaborators—focused on outcomes, not hype."
-        primaryCta={{ label: "Start a project", href: "/contact" }}
-        secondaryCta={{ label: "View projects", href: "/projects" }}
+    <div>
+      <HeroGradient
+        headline="Reviews that help you buy with confidence"
+        subheadline="A few highlights from customers using NeonCart products at home, work, and on the move."
+        primaryCta={{ label: "Shop top rated", href: "/store?sort=top-rated" }}
+        secondaryCta={{ label: "Contact support", href: "/contact" }}
       />
-
-      <TestimonialsAnimated
-        title="Client feedback"
-        subtitle="Clear communication, consistent design, and fast delivery."
+      <TestimonialsGrid
+        headline="What customers are saying"
+        subheadline="Short, specific feedback—focused on quality and usability."
         testimonials={[
           {
             quote:
-              "The site feels premium and trustworthy. Product pages are clearer, and the design system keeps everything consistent.",
+              "The desk tray set instantly made my workspace feel calmer. The finish is premium and it doesn’t slide around.",
             name: "Maya R.",
-            designation: "Founder, DTC Brand",
-            src: "https://res.cloudinary.com/dwc294mzm/image/upload/c_fill,w_1000,h_750,g_auto/v1/site-images/corporate/default.jpg",
+            title: "Seattle, WA",
+            rating: 5,
           },
           {
             quote:
-              "Parv’s component library approach made future updates straightforward. We shipped fast and stayed on-brand.",
-            name: "Daniel K.",
-            designation: "Product Lead, SaaS",
-            src: "https://res.cloudinary.com/dwc294mzm/image/upload/c_fill,w_1000,h_750,g_auto/v1/site-images/corporate/default.jpg",
+              "Fast shipping and the MagSafe stand is rock solid. It’s the first charger that doesn’t wobble on my desk.",
+            name: "Jordan K.",
+            title: "Brooklyn, NY",
+            rating: 5,
           },
           {
             quote:
-              "Excellent polish—typography, spacing, and micro-interactions. The final build is modern and responsive.",
-            name: "Aisha S.",
-            designation: "Creative Director",
-            src: "https://res.cloudinary.com/dwc294mzm/image/upload/c_fill,w_800,h_800,g_auto/v1/site-images/corporate/default.jpg",
+              "The travel pouch is perfect for cables and adapters. I wish I bought two—one for work and one for trips.",
+            name: "Priya S.",
+            title: "Austin, TX",
+            rating: 4,
           },
           {
-            quote:
-              "Reliable delivery and strong technical decisions. SEO and performance were handled thoughtfully from the start.",
-            name: "Jon P.",
-            designation: "Agency Partner",
-            src: "https://res.cloudinary.com/dwc294mzm/image/upload/c_fill,w_1200,h_675,g_auto/v1/site-images/corporate/default.jpg",
+            quote: "The bottle keeps ice overnight. The coating feels durable and doesn’t show fingerprints.",
+            name: "Derek W.",
+            title: "Denver, CO",
+            rating: 5,
+          },
+          {
+            quote: "The braided cable is thick and doesn’t kink. Great value for the length.",
+            name: "Hana N.",
+            title: "San Jose, CA",
+            rating: 4,
           },
         ]}
       />
-
-      <CTASparkles
-        title="Ready to ship a modern website?"
-        subtitle="Build a clean system that stays fresh with quarterly updates."
-        ctaLabel="Contact"
-        ctaHref="/contact"
-        secondaryCtaLabel="Browse store"
-        secondaryCtaHref="/store"
+      <CTABanner
+        headline="Need help picking the right item?"
+        description="Tell us your device and use-case—we’ll recommend a couple of options."
+        ctaLabel="Ask a question"
+        ctaHref="/contact?topic=product-question"
+        secondaryCtaLabel="Shop best sellers"
+        secondaryCtaHref="/store?sort=best-sellers"
       />
-    </main>
+    </div>
   )
 }

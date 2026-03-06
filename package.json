@@ -1,5 +1,5 @@
 {
-  "name": "parv-portfolio-commerce",
+  "name": "neon-cart-commerce",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -34,8 +34,7 @@
     "date-fns": "4.1.0",
     "sonner": "1.7.4",
     "mini-svg-data-uri": "1.4.4",
-    "zod": "3.24.1",
-    "@prisma/client": "*"
+    "zod": "3.24.1"
   },
   "devDependencies": {
     "typescript": "5.7.3",

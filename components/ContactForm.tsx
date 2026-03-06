@@ -1,10 +1,10 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { AceternityInput } from '@/components/ui/aceternity-input';
-import { AceternityLabel } from '@/components/ui/aceternity-label';
+import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import { Card, CardContent } from '@/components/ui/card';
 
 interface ContactInfo {
   icon: string;
@@ -19,12 +19,16 @@ interface ContactFormProps {
 }
 
 export default function ContactForm({
-  headline = 'Contact Our Support Team',
-  subheadline = 'Questions about orders, shipping, or returns? We’re here to help.',
-  contactInfo = [],
+  headline = 'Need Help? We’re Here for You',
+  subheadline = 'Send us a message and our support team will get back to you shortly.',
+  contactInfo = [
+    { icon: '📞', label: 'Phone', value: '+1 (800) 555-0199' },
+    { icon: '✉️', label: 'Email', value: 'support@shopnova.com' },
+    { icon: '📍', label: 'Address', value: '120 Market Street, San Francisco, CA' },
+  ],
 }: Partial<ContactFormProps>) {
   return (
-    <section className="bg-muted/50 py-20 md:py-28">
+    <section className="bg-muted/50 py-20 md:py-28" id="contact">
       <div className="container mx-auto max-w-7xl px-4">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl">{headline}</h2>
@@ -36,21 +40,21 @@ export default function ContactForm({
               <form className="space-y-6">
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div className="space-y-2">
-                    <AceternityLabel htmlFor="name">Name</AceternityLabel>
-                    <AceternityInput id="name" placeholder="Your full name" />
+                    <Label htmlFor="name">Name</Label>
+                    <Input id="name" placeholder="Your name" />
                   </div>
                   <div className="space-y-2">
-                    <AceternityLabel htmlFor="email">Email</AceternityLabel>
-                    <AceternityInput id="email" type="email" placeholder="you@example.com" />
+                    <Label htmlFor="email">Email</Label>
+                    <Input id="email" type="email" placeholder="your@email.com" />
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <AceternityLabel htmlFor="subject">Subject</AceternityLabel>
-                  <AceternityInput id="subject" placeholder="How can we help?" />
+                  <Label htmlFor="subject">Subject</Label>
+                  <Input id="subject" placeholder="How can we help?" />
                 </div>
                 <div className="space-y-2">
-                  <AceternityLabel htmlFor="message">Message</AceternityLabel>
-                  <Textarea id="message" placeholder="Share your question or concern..." rows={5} />
+                  <Label htmlFor="message">Message</Label>
+                  <Textarea id="message" placeholder="Tell us more..." rows={5} />
                 </div>
                 <Button type="submit" className="w-full">
                   Send Message

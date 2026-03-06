@@ -1,91 +1,92 @@
 "use client";
 
 import Link from 'next/link'
-import { Github, Instagram, Linkedin, Twitter } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
+import { cn } from '@/lib/utils'
+
+interface FooterLink {
+  label: string
+  href: string
+}
 
 interface FooterProps {
-  brandName: string
-  pageLinks: { label: string; href: string }[]
-  storeLinks: { label: string; href: string }[]
-  socialLinks: { label: string; href: string; icon: string }[]
-  legalText: string
+  shopLinks?: FooterLink[]
+  companyLinks?: FooterLink[]
+  helpLinks?: FooterLink[]
+  address?: string
+  hours?: string
+  legalText?: string
+  className?: string
 }
 
 export default function Footer({
-  brandName = 'Parv Studio',
-  pageLinks = [
-    { label: 'About Me', href: '#about' },
-    { label: 'Projects', href: '#projects' },
-    { label: 'Skills', href: '#skills' },
-    { label: 'Testimonials', href: '#testimonials' },
-    { label: 'Contact', href: '#contact' },
+  shopLinks = [
+    { label: 'New Arrivals', href: '/collections/new' },
+    { label: 'Best Sellers', href: '/collections/best-sellers' },
+    { label: 'Sale', href: '/collections/sale' },
   ],
-  storeLinks = [
-    { label: 'Store Home', href: '/store' },
-    { label: 'Store Details', href: '/store/details' },
+  companyLinks = [
+    { label: 'About Us', href: '/about' },
+    { label: 'Careers', href: '/careers' },
+    { label: 'Press', href: '/press' },
   ],
-  socialLinks = [
-    { label: 'LinkedIn', href: '#', icon: 'Linkedin' },
-    { label: 'GitHub', href: '#', icon: 'Github' },
-    { label: 'Instagram', href: '#', icon: 'Instagram' },
-    { label: 'Twitter', href: '#', icon: 'Twitter' },
+  helpLinks = [
+    { label: 'Shipping', href: '/shipping' },
+    { label: 'Returns', href: '/returns' },
+    { label: 'Contact', href: '/contact' },
   ],
-  legalText = '© 2026 Parv Studio. All rights reserved.',
+  address = '128 Market Street, San Francisco, CA 94103',
+  hours = 'Mon–Sat 10:00 AM – 7:00 PM',
+  legalText = '© 2026 Northlane Shop. All rights reserved.',
+  className = '',
 }: Partial<FooterProps>) {
-  const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
-    Linkedin,
-    Github,
-    Instagram,
-    Twitter,
-  }
-
   return (
-    <footer className="border-t border-slate-200 bg-white">
-      <div className="mx-auto grid max-w-7xl gap-8 px-4 py-14 md:grid-cols-4 md:px-6">
+    <footer className={cn('bg-[#1A1A2E] text-white', className)}>
+      <div className="mx-auto grid max-w-7xl gap-8 px-4 py-14 md:grid-cols-4">
         <div>
-          <h3 className="text-lg font-semibold text-[#1A1A2E]">{brandName}</h3>
-          <p className="mt-2 text-sm text-slate-600">Modern portfolio-commerce experience updated every 3 months.</p>
+          <h4 className="text-lg font-bold">Northlane Shop</h4>
+          <p className="mt-3 text-sm text-white/80">{address}</p>
+          <p className="mt-1 text-sm text-white/80">{hours}</p>
         </div>
-
         <div>
-          <h4 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-500">Pages</h4>
-          <div className="grid gap-2">
-            {pageLinks.map((item) => (
-              <Link key={item.href} href={item.href} className="text-sm text-slate-700 hover:text-[#4f46e5]">
-                {item.label}
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        <div>
-          <h4 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-500">Store</h4>
-          <div className="grid gap-2">
-            {storeLinks.map((item) => (
-              <Link key={item.href} href={item.href} className="text-sm text-slate-700 hover:text-[#4f46e5]">
-                {item.label}
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        <div>
-          <h4 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-500">Social</h4>
-          <div className="flex gap-3">
-            {socialLinks.map((item) => {
-              const Icon = iconMap[item.icon] || Linkedin
-              return (
-                <Link key={item.label} href={item.href} className="rounded-lg border border-slate-200 p-2 hover:bg-slate-50">
-                  <Icon className="h-4 w-4 text-slate-700" />
+          <h5 className="font-semibold">Shop</h5>
+          <ul className="mt-3 space-y-2 text-sm text-white/80">
+            {shopLinks.map((l) => (
+              <li key={l.href}>
+                <Link href={l.href} className="hover:text-white">
+                  {l.label}
                 </Link>
-              )
-            })}
-          </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <h5 className="font-semibold">Company</h5>
+          <ul className="mt-3 space-y-2 text-sm text-white/80">
+            {companyLinks.map((l) => (
+              <li key={l.href}>
+                <Link href={l.href} className="hover:text-white">
+                  {l.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <h5 className="font-semibold">Help</h5>
+          <ul className="mt-3 space-y-2 text-sm text-white/80">
+            {helpLinks.map((l) => (
+              <li key={l.href}>
+                <Link href={l.href} className="hover:text-white">
+                  {l.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
-      <Separator />
-      <div className="mx-auto max-w-7xl px-4 py-4 text-xs text-slate-500 md:px-6">{legalText}</div>
+      <Separator className="bg-white/20" />
+      <div className="mx-auto max-w-7xl px-4 py-4 text-xs text-white/70">{legalText}</div>
     </footer>
   )
 }

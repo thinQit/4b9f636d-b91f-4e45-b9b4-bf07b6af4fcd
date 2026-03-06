@@ -3,30 +3,29 @@ export interface NavItem {
   href: string;
 }
 
-export interface CTA {
+export interface Cta {
   label: string;
   href: string;
 }
 
 export interface Product {
-  slug: string;
+  sku: string;
   name: string;
   price: number;
   compareAtPrice?: number;
-  currency: string;
   rating?: number;
   reviewCount?: number;
   badge?: string;
   image: string;
-  shortDescription?: string;
+  href: string;
   highlights?: string[];
 }
 
 export interface Category {
   name: string;
-  description: string;
   href: string;
-  image: string;
+  description?: string;
+  image?: string;
 }
 
 export interface Testimonial {
@@ -34,12 +33,12 @@ export interface Testimonial {
   location?: string;
   rating: number;
   quote: string;
-  product?: string;
-  date?: string;
 }
 
-export interface ApiResponse<T> {
-  data: T;
-  success: boolean;
-  message?: string;
+export interface ContactFormInput {
+  name: string;
+  email: string;
+  topic: string;
+  orderNumber?: string;
+  message: string;
 }

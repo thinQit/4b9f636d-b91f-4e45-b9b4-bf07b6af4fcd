@@ -1,56 +1,57 @@
 export const dynamic = 'force-dynamic';
 
-import HeroAurora from "@/components/HeroAurora"
-import FeaturesCards3D from "@/components/FeaturesCards3D"
-import CTASparkles from "@/components/CTASparkles"
+import HeroGradient from "@/components/HeroGradient";
+import CTABanner from "@/components/CTABanner";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "SEO & metadata | NeonCart Commerce",
+  description:
+    "Manage page titles, descriptions, and social previews for NeonCart. See route-by-route metadata recommendations for optimal SEO and social sharing.",
+  openGraph: {
+    title: "SEO & metadata | NeonCart Commerce",
+    description:
+      "Manage page titles, descriptions, and social previews for NeonCart. See route-by-route metadata recommendations.",
+    url: "https://neoncart.co/seo",
+    images: [
+      {
+        url: "/images/og/home.jpg",
+        width: 1600,
+        height: 900,
+        alt: "NeonCart Commerce | Modern Essentials, Fast Shipping",
+      },
+    ],
+    siteName: "NeonCart Commerce",
+    type: "website",
+  },
+  alternates: { canonical: "https://neoncart.co/seo" },
+  twitter: {
+    card: "summary_large_image",
+    title: "SEO & metadata | NeonCart Commerce",
+    description:
+      "Manage page titles, descriptions, and social previews for NeonCart. See route-by-route metadata recommendations.",
+    images: ["/images/og/home.jpg"],
+  },
+};
 
 export default function SEOPage() {
   return (
-    <main>
-      <HeroAurora
-        title="SEO metadata system"
-        subtitle="A structured approach to titles, descriptions, OpenGraph, and JSON-LD across portfolio and store pages."
-        primaryCta={{ label: "View projects", href: "/projects" }}
-        secondaryCta={{ label: "Browse store", href: "/store" }}
+    <div>
+      <HeroGradient
+        headline="SEO & metadata"
+        subheadline="A single place to manage titles, descriptions, and social previews for key pages."
+        primaryCta={{ label: "View store", href: "/store" }}
+        secondaryCta={{ label: "Contact", href: "/contact" }}
       />
-
-      <FeaturesCards3D
-        badge="Metadata rules (site-wide)"
-        title="Consistent defaults with page-level overrides"
-        features={[
-          {
-            icon: "Heading1",
-            title: "Title format",
-            description: "Default: {Page} | Parv — Portfolio + Storefront.",
-          },
-          {
-            icon: "FileSearch",
-            title: "Description strategy",
-            description:
-              "Concise value proposition plus primary keyword focus per page intent.",
-          },
-          {
-            icon: "Image",
-            title: "OpenGraph",
-            description:
-              "1200×630 social previews using brand gradient and clear page context.",
-          },
-          {
-            icon: "Braces",
-            title: "JSON-LD",
-            description: "Person, WebSite, and Product schema for better discoverability.",
-          },
-        ]}
+      {/* Additional page content or tables for recommended metadata can be added here as needed */}
+      <CTABanner
+        headline="Ready to optimize and convert?"
+        description="Use clean metadata and consistent page structure to improve discoverability."
+        ctaLabel="Shop best sellers"
+        ctaHref="/store?sort=best-sellers"
+        secondaryCtaLabel="Store details"
+        secondaryCtaHref="/store-details"
       />
-
-      <CTASparkles
-        title="Want SEO baked into your build?"
-        subtitle="Metadata, OpenGraph, and structured data ship as standard workflow."
-        ctaLabel="Contact"
-        ctaHref="/contact"
-        secondaryCtaLabel="About"
-        secondaryCtaHref="/about"
-      />
-    </main>
-  )
+    </div>
+  );
 }

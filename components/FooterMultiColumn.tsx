@@ -17,9 +17,34 @@ interface FooterMultiColumnProps {
 
 export default function FooterMultiColumn({
   brand = 'ShopNova',
-  description = 'Your trusted destination for quality essentials, curated collections, and fast delivery.',
-  columns = [],
-  copyright = '',
+  description = 'Your trusted online destination for quality products, fair prices, and dependable delivery.',
+  columns = [
+    {
+      title: 'Shop',
+      links: [
+        { label: 'New Arrivals', href: '#featured-products' },
+        { label: 'Best Sellers', href: '#featured-products' },
+        { label: 'Categories', href: '#categories' },
+      ],
+    },
+    {
+      title: 'Support',
+      links: [
+        { label: 'FAQs', href: '#faq' },
+        { label: 'Shipping & Returns', href: '#footer' },
+        { label: 'Contact Us', href: '#contact' },
+      ],
+    },
+    {
+      title: 'Company',
+      links: [
+        { label: 'About', href: '#about' },
+        { label: 'Privacy Policy', href: '#footer' },
+        { label: 'Terms of Service', href: '#footer' },
+      ],
+    },
+  ],
+  copyright,
 }: Partial<FooterMultiColumnProps>) {
   return (
     <footer className="bg-foreground text-background">
@@ -37,10 +62,7 @@ export default function FooterMultiColumn({
                   {col.links.map(function (link) {
                     return (
                       <li key={link.href}>
-                        <Link
-                          href={link.href}
-                          className="text-sm text-background/70 transition-colors hover:text-background"
-                        >
+                        <Link href={link.href} className="text-sm text-background/70 transition-colors hover:text-background">
                           {link.label}
                         </Link>
                       </li>

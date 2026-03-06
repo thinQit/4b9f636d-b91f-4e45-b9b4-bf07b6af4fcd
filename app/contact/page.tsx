@@ -1,43 +1,28 @@
 export const dynamic = 'force-dynamic';
 
-import HeroAurora from "@/components/HeroAurora"
+import HeroGradient from "@/components/HeroGradient"
 import ContactForm from "@/components/ContactForm"
-import CTASparkles from "@/components/CTASparkles"
+import MapEmbed from "@/components/MapEmbed"
 
 export default function ContactPage() {
   return (
-    <main>
-      <HeroAurora
-        title="Contact"
-        subtitle="Tell me what you’re building. I’ll reply within 1–2 business days with next steps."
-        primaryCta={{ label: "Send a message", href: "#contact-form" }}
-        secondaryCta={{ label: "Browse store", href: "/store" }}
+    <div>
+      <HeroGradient
+        headline="Contact NeonCart support"
+        subheadline="Questions about shipping, returns, or product compatibility? We reply within 1 business day."
+        primaryCta={{ label: "Email support", href: "mailto:support@neoncart.co" }}
+        secondaryCta={{ label: "View store details", href: "/store-details" }}
       />
-
-      <section id="contact-form">
-        <ContactForm
-          headline="Send a message"
-          subheadline="Share your goals, timeline, and references. If it’s a store, include product count and categories."
-          contactInfo={[
-            { icon: "Mail", label: "Email", value: "hello@parv.dev" },
-            { icon: "Clock3", label: "Response time", value: "1–2 business days" },
-            {
-              icon: "CalendarDays",
-              label: "Update cadence",
-              value: "Quarterly (every 3 months)",
-            },
-          ]}
-        />
-      </section>
-
-      <CTASparkles
-        title="Remote-first, available globally"
-        subtitle="Schedule a call and share your timeline, goals, and must-have pages."
-        ctaLabel="Book a call"
-        ctaHref="/contact#contact-form"
-        secondaryCtaLabel="About"
-        secondaryCtaHref="/about"
+      <ContactForm
+        headline="Send a message"
+        subheadline="Include your order number (if you have one) so we can help faster."
+        contactInfo={[
+          { icon: "Mail", label: "Support email", value: "support@neoncart.co" },
+          { icon: "Phone", label: "Support phone", value: "+1 (512) 555-0199" },
+          { icon: "Clock", label: "Hours", value: "Mon–Fri 9:00am–5:00pm CT" },
+        ]}
       />
-    </main>
+      <MapEmbed />
+    </div>
   )
 }

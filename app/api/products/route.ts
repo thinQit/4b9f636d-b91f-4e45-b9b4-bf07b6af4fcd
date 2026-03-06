@@ -1,71 +1,90 @@
-import { Prisma } from "@prisma/client";
 import { NextResponse } from "next/server";
-import { db } from "@/lib/db";
+import { products } from "@/lib/products";
 import { productsQuerySchema } from "@/lib/validators";
 
-const categoryMap: Record<string, "templates" | "ui_kits" | "starters" | "animations"> = {
-  templates: "templates",
-  "ui-kits": "ui_kits",
-  starters: "starters",
-  animations: "animations",
-};
-
-export async function GET(req: Request) {
+export async function GET(request: Request) {
   try {
-    const { searchParams } = new URL(req.url);
-    const parsed = productsQuerySchema.safeParse({
+    const { searchParams } = new URL(request.url);
+    const rawQuery = {
       category: searchParams.get("category") ?? undefined,
       sort: searchParams.get("sort") ?? undefined,
       q: searchParams.get("q") ?? undefined,
-      featured: searchParams.get("featured") ?? undefined,
-    });
+      minPrice: searchParams.get("minPrice") ?? undefined,
+      maxPrice: searchParams.get("maxPrice") ?? undefined,
+    };
+
+    const parsed = productsQuerySchema.safeParse(rawQuery);
 
     if (!parsed.success) {
       return NextResponse.json(
-        { error: "Invalid query parameters", issues: parsed.error.flatten() },
+        {
+          success: false,
+          error: "Invalid query parameters",
+          details: parsed.error.flatten(),
+        },
         { status: 400 }
       );
     }
 
-    const { category, sort, q, featured } = parsed.data;
+    const { category, sort, q, minPrice, maxPrice } = parsed.data;
+    let filtered = [...products];
 
-    const where: Prisma.ProductWhereInput = {
-      isPublished: true,
-      ...(category ? { category: categoryMap[category] } : {}),
-      ...(typeof featured === "boolean" ? { isFeatured: featured } : {}),
-      ...(q
-        ? {
-            OR: [
-              { name: { contains: q, mode: "insensitive" } },
-              { shortDescription: { contains: q, mode: "insensitive" } },
-              { highlights: { hasSome: [q] } },
-            ],
-          }
-        : {}),
-    };
+    if (category) {
+      filtered = filtered.filter((product) => product.category === category);
+    }
 
-    const orderBy: Prisma.ProductOrderByWithRelationInput[] =
-      sort === "price_asc"
-        ? [{ price: "asc" as const }]
-        : sort === "price_desc"
-        ? [{ price: "desc" as const }]
-        : sort === "rating_desc"
-        ? [{ rating: "desc" as const }, { reviewCount: "desc" as const }]
-        : sort === "name_asc"
-        ? [{ name: "asc" as const }]
-        : [{ createdAt: "desc" as const }];
+    if (q) {
+      filtered = filtered.filter((product) => {
+        const haystack = `${product.name} ${product.description} ${product.highlights.join(" ")}`.toLowerCase();
+        return haystack.includes(q);
+      });
+    }
 
-    const products = await db.product.findMany({
-      where,
-      orderBy,
-    });
+    if (typeof minPrice === "number") {
+      filtered = filtered.filter((product) => product.price >= minPrice);
+    }
 
-    return NextResponse.json({ data: products }, { status: 200 });
-  } catch (error) {
+    if (typeof maxPrice === "number") {
+      filtered = filtered.filter((product) => product.price <= maxPrice);
+    }
+
+    if (sort === "best-sellers") {
+      filtered.sort((a, b) => Number(Boolean(b.isBestSeller)) - Number(Boolean(a.isBestSeller)));
+    } else if (sort === "top-rated") {
+      filtered.sort((a, b) => b.rating - a.rating);
+    } else if (sort === "price-low") {
+      filtered.sort((a, b) => a.price - b.price);
+    } else if (sort === "price-high") {
+      filtered.sort((a, b) => b.price - a.price);
+    } else if (sort === "new") {
+      filtered.sort((a, b) => Number(Boolean(b.isNewArrival)) - Number(Boolean(a.isNewArrival)));
+    }
+
     return NextResponse.json(
       {
-        error: "Failed to fetch products.",
-        details: error instanceof Error ? error.message : "Unknown error",
+        success: true,
+        data: filtered.map((product) => ({
+          sku: product.sku,
+          slug: product.slug,
+          name: product.name,
+          category: product.category,
+          price: product.price,
+          compareAtPrice: product.compareAtPrice ?? null,
+          rating: product.rating,
+          reviewCount: product.reviewCount,
+          badge: product.badge ?? null,
+          image: product.image,
+        })),
+        total: filtered.length,
+      },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("GET /api/products error:", error);
+    return NextResponse.json(
+      {
+        success: false,
+        error: "Internal server error",
       },
       { status: 500 }
     );
